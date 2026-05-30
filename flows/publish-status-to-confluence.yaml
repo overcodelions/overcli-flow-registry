@@ -1,19 +1,36 @@
 name: Publish status to Confluence
-description: Build a status report and draft a Confluence page
+description: Pull recent activity, summarize, draft a Confluence-ready page, then publish
 input: user_prompt
 steps:
-  - id: research
-    model: { backend: claude, model: claude-sonnet-4-6 }
+  - id: fetch
+    model: { backend: claude, model: claude-haiku-4-5 }
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
-    output: research.md
-  - id: plan
+    output: activity.md
+
+  - id: summarize
     model: { backend: claude, model: claude-opus-4-7 }
     role: planner
-    inputs: [user_prompt, research.md]
+    inputs: [user_prompt, activity.md]
     tools: [Read, Grep, Glob]
+    output: summary.md
+
+  - id: draft
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: technical-writer
+    inputs: [summary.md]
+    tools: [read_file, write_file]
+    permission_mode: acceptEdits
     output: page.md
+
+  - id: publish
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: shipper
+    inputs: [page.md]
+    tools: [mcp:atlassian]
+    pause_before: true
+    output: url.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [communication, confluence, mcp-confluence, claude]
+tags: [communication, confluence, mcp-confluence, claude, codex]

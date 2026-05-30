@@ -1,18 +1,40 @@
 name: Thorough PR review
-description: Multi-pass adversarial review of the current diff
+description: Map the diff, run parallel correctness and security passes, then synthesize a verified review
 input: user_prompt
 steps:
-  - id: research
+  - id: map
     model: { backend: claude, model: claude-sonnet-4-6 }
     role: researcher
     inputs: [user_prompt]
     tools: [Bash, Read, Grep, Glob]
-    output: research.md
-  - id: plan
+    output: map.md
+
+  - id: review-correctness
     model: { backend: claude, model: claude-opus-4-7 }
-    role: planner
-    inputs: [user_prompt, research.md]
-    tools: [Read, Grep, Glob]
+    role: code-reviewer
+    inputs: [user_prompt, map.md]
+    tools: [Read, Grep, Glob, Bash]
+    output: correctness.md
+
+  - id: review-security
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [user_prompt, map.md]
+    tools: [Read, Grep, Glob, Bash]
+    output: security.md
+
+  - id: verify
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [correctness.md, security.md]
+    tools: [Read, Grep, Glob, Bash]
+    output: verified.md
+
+  - id: synthesize
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: technical-writer
+    inputs: [verified.md]
+    tools: []
     output: review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

@@ -1,19 +1,35 @@
 name: System design doc
-description: Research the area, produce a full design doc
+description: Research the area, design alternatives, draft a full design doc, then adversarially review
 input: user_prompt
 steps:
   - id: research
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    model: { backend: claude, model: claude-opus-4-7 }
     role: researcher
     inputs: [user_prompt]
     tools: [Read, Grep, Glob, WebFetch]
     output: research.md
-  - id: plan
+
+  - id: design
     model: { backend: claude, model: claude-opus-4-7 }
     role: planner
     inputs: [user_prompt, research.md]
     tools: [Read, Grep, Glob]
     output: design.md
+
+  - id: draft
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: technical-writer
+    inputs: [research.md, design.md]
+    tools: [read_file, write_file]
+    permission_mode: acceptEdits
+    output: draft.md
+
+  - id: review
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [design.md, draft.md]
+    tools: [Read, Grep, Glob]
+    output: design-doc.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [design, docs, claude]
+tags: [design, docs, claude, codex]

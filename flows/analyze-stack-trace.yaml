@@ -1,13 +1,35 @@
 name: Analyze stack trace
-description: Diagnose a stack trace against the codebase
+description: Parse the trace, locate frames in the codebase, diagnose root cause, then propose a fix
 input: user_prompt
 steps:
-  - id: run
-    model: { backend: claude, model: claude-opus-4-7 }
+  - id: parse
+    model: { backend: claude, model: claude-haiku-4-5 }
     role: researcher
     inputs: [user_prompt]
+    tools: []
+    output: frames.md
+
+  - id: locate
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [frames.md]
+    tools: [Read, Grep, Glob]
+    output: locations.md
+
+  - id: diagnose
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: debugger
+    inputs: [user_prompt, frames.md, locations.md]
     tools: [Read, Grep, Glob]
     output: diagnosis.md
+
+  - id: propose-fix
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: implementer
+    inputs: [diagnosis.md, locations.md]
+    tools: [read_file, list_dir, grep, write_file, edit_file]
+    permission_mode: acceptEdits
+    output: fix.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [debugging, logs, repo, claude]
+tags: [debugging, logs, repo, claude, codex]

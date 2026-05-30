@@ -1,12 +1,33 @@
 name: Dependency upgrade audit
-description: Audit deps for outdated, vulnerable, or breaking upgrades
+description: Scan installed deps, cross-check vulnerability feeds, analyze breakage risk, then format an upgrade plan
 input: user_prompt
 steps:
-  - id: run
+  - id: scan
     model: { backend: claude, model: claude-sonnet-4-6 }
     role: researcher
     inputs: [user_prompt]
-    tools: [Bash, Read, WebFetch]
+    tools: [Bash, Read]
+    output: outdated.md
+
+  - id: vuln
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [outdated.md]
+    tools: [WebFetch, Bash]
+    output: vulns.md
+
+  - id: analyze
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [outdated.md, vulns.md]
+    tools: [Read, Grep, Glob]
+    output: analysis.md
+
+  - id: format
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: technical-writer
+    inputs: [analysis.md]
+    tools: []
     output: audit.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

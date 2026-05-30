@@ -1,13 +1,28 @@
 name: Dockerfile review
-description: Review Dockerfile for size, security, layer cache issues
+description: Read the Dockerfile and context, review for size/security/cache issues, then draft concrete fixes
 input: user_prompt
 steps:
-  - id: run
-    model: { backend: claude, model: claude-sonnet-4-6 }
-    role: reviewer
+  - id: read
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: researcher
     inputs: [user_prompt]
-    tools: [Read, Grep]
+    tools: [Read, Grep, Glob]
+    output: context.md
+
+  - id: review
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [context.md]
+    tools: [Read, Grep, WebFetch]
+    output: findings.md
+
+  - id: suggest-fixes
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: implementer
+    inputs: [context.md, findings.md]
+    tools: [read_file, write_file, edit_file]
+    permission_mode: acceptEdits
     output: review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [review, infra, devops, claude]
+tags: [review, infra, devops, claude, codex]
