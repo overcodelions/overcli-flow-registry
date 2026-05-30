@@ -4,21 +4,21 @@ This directory is the source of truth for [github.com/overcodelions/overcli-flow
 
 ## Adding a flow
 
-1. Drop a flow YAML file into `flows/` (e.g., `flows/example-flow.yaml`).
-2. Compute its sha256:
-   ```bash
-   shasum -a 256 flows/example-flow.yaml | cut -d ' ' -f1
-   ```
-3. Add an entry to `index.json` with the sha256 and a relative `yaml_url`:
-   ```json
-   {
-     "id": "example-flow",
-     "name": "Example Flow",
-     "description": "A sample flow",
-     "version": "1.0.0",
-     "sha256": "<sha256-hash>",
-     "yaml_url": "flows/example-flow.yaml"
-   }
-   ```
+1. Create a flow YAML file in `flows/` following the schema in `overcli/src/shared/flows/schema.ts`:
+   - Must have `input: user_prompt` (literal)
+   - At least one step with `user_prompt` in its `inputs`
+   - Valid role: `planner | implementer | plan-reviewer | reviewer | test-writer | researcher | shipper | custom`
+   - Valid model backend: `claude` or `ollama`
+   - Include `author` and `version` (e.g., `1.0.0`)
 
-> **Note:** CI must validate flows using `validateFlow` to ensure only valid flows are published (deferred from v1).
+2. Tag your flow with 3–6 tags from `TAGS.md` (e.g., `[design, api, backend, claude]`)
+
+3. Regenerate `index.json`:
+   ```bash
+   bash scripts/build-index.sh
+   ```
+   This computes sha256 hashes and validates all flows exist.
+
+4. Create a pull request and merge to `main`.
+
+> **Note:** `index.json` is auto-generated — do not edit it by hand. The build script ensures sha256 hashes match files on disk (`overcli/src/main/flows/registry.ts:101-104` validates this during install). Branch protection requires PR review before merge.
