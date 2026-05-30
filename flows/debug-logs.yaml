@@ -1,10 +1,35 @@
 name: Debug Error Logs
-description: Analyze error logs and provide diagnosis and suggested fixes
+description: Diagnose error logs, locate the failing code, draft a fix, then verify the fix preserves behavior
 input: error_logs
 steps:
-  - id: analyze
-    model: { backend: claude, model: claude-sonnet-4-6 }
+  - id: diagnose
+    model: { backend: claude, model: claude-opus-4-7 }
     role: debugger
     inputs: [error_logs]
-    tools: [Grep]
+    tools: [Read, Grep, Glob]
     output: diagnosis.md
+
+  - id: locate
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [error_logs, diagnosis.md]
+    tools: [Read, Grep, Glob, Bash]
+    output: locations.md
+
+  - id: fix
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: implementer
+    inputs: [diagnosis.md, locations.md]
+    tools: [read_file, list_dir, grep, write_file, edit_file]
+    permission_mode: acceptEdits
+    output: patch.md
+
+  - id: verify
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [diagnosis.md, patch.md]
+    tools: [Read, Grep, Glob, Bash]
+    output: report.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [debugging, logs, claude, codex]

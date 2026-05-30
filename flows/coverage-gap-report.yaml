@@ -1,12 +1,26 @@
 name: Coverage gap report
-description: Identify untested behavior in recently changed code
+description: Diff recent changes, analyze test coverage, then format a gap report ranked by risk
 input: user_prompt
 steps:
-  - id: run
+  - id: diff
     model: { backend: claude, model: claude-sonnet-4-6 }
     role: researcher
     inputs: [user_prompt]
     tools: [Bash, Read, Grep, Glob]
+    output: changes.md
+
+  - id: analyze
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [changes.md]
+    tools: [Bash, Read, Grep, Glob]
+    output: gaps.md
+
+  - id: format
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: technical-writer
+    inputs: [gaps.md]
+    tools: []
     output: report.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

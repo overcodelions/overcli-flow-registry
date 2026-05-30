@@ -1,13 +1,28 @@
 name: Changelog from commits
-description: Group recent commits by type and emit CHANGELOG entries
+description: Pull recent commits, group by conventional type, then emit polished CHANGELOG entries
 input: user_prompt
 steps:
-  - id: run
-    model: { backend: claude, model: claude-sonnet-4-6 }
+  - id: gather
+    model: { backend: claude, model: claude-haiku-4-5 }
     role: researcher
     inputs: [user_prompt]
+    tools: [Bash]
+    output: commits.md
+
+  - id: categorize
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [commits.md]
     tools: [Bash, Read]
+    output: grouped.md
+
+  - id: format
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: technical-writer
+    inputs: [grouped.md]
+    tools: [read_file, write_file]
+    permission_mode: acceptEdits
     output: changelog.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [documentation, repo, release, claude]
+tags: [documentation, repo, release, claude, codex]

@@ -1,35 +1,35 @@
-name: Architecture Decision Record
-description: Research existing ADRs + context, design alternatives, draft the ADR, then review for completeness
+name: "Incident postmortem from notes"
+description: Reconstruct the timeline, analyze root cause + contributing factors, draft a postmortem, then review for blamelessness
 input: user_prompt
 steps:
-  - id: research
+  - id: timeline
     model: { backend: claude, model: claude-sonnet-4-6 }
     role: researcher
     inputs: [user_prompt]
-    tools: [Read, Grep, Glob]
-    output: research.md
+    tools: [Read, Grep, Glob, WebFetch]
+    output: timeline.md
 
-  - id: design
+  - id: root-cause
     model: { backend: claude, model: claude-opus-4-7 }
-    role: planner
-    inputs: [user_prompt, research.md]
+    role: debugger
+    inputs: [user_prompt, timeline.md]
     tools: [Read, Grep, Glob]
-    output: design.md
+    output: analysis.md
 
   - id: draft
     model: { backend: codex, model: gpt-5.4-mini }
     role: technical-writer
-    inputs: [design.md]
+    inputs: [timeline.md, analysis.md]
     tools: [read_file, write_file]
     permission_mode: acceptEdits
     output: draft.md
 
   - id: review
     model: { backend: claude, model: claude-opus-4-7 }
-    role: reviewer
-    inputs: [design.md, draft.md]
+    role: editor
+    inputs: [analysis.md, draft.md]
     tools: [Read]
-    output: adr.md
+    output: postmortem.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [design, docs, claude, codex]
+tags: [operations, docs, infra, claude, codex]
