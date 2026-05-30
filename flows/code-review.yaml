@@ -1,10 +1,34 @@
 name: Code Review
-description: Review a code change for bugs, security issues, and quality improvements
+description: Survey the diff, deeply review for bugs and security, adversarially verify findings, format a final report
 input: code_diff
 steps:
-  - id: review
+  - id: survey
     model: { backend: claude, model: claude-sonnet-4-6 }
-    role: code-reviewer
+    role: researcher
     inputs: [code_diff]
     tools: [Read, Grep, Glob]
+    output: survey.md
+
+  - id: review
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: code-reviewer
+    inputs: [code_diff, survey.md]
+    tools: [Read, Grep, Glob]
+    output: findings.md
+
+  - id: verify
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [code_diff, findings.md]
+    tools: [Read, Grep, Glob, Bash]
+    output: verified.md
+
+  - id: format
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: technical-writer
+    inputs: [verified.md]
+    tools: []
     output: review.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [review, quality, claude]

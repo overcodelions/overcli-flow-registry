@@ -1,26 +1,26 @@
-name: Spec → Jira tickets
-description: Fetch a Confluence spec, break it into an epic + stories, draft tickets, then create them
+name: "Productboard feature → Jira tickets"
+description: Fetch the Productboard feature, analyze scope, design epic + tickets, then create them in Jira
 input: user_prompt
 steps:
   - id: fetch
     model: { backend: claude, model: claude-haiku-4-5 }
     role: researcher
     inputs: [user_prompt]
-    tools: [mcp:atlassian, WebFetch]
-    output: spec.md
+    tools: [WebFetch]
+    output: feature.md
 
-  - id: breakdown
+  - id: analyze
     model: { backend: claude, model: claude-opus-4-7 }
     role: planner
-    inputs: [spec.md]
+    inputs: [feature.md]
     tools: [Read, Grep, Glob]
-    output: breakdown.md
+    output: analysis.md
 
-  - id: draft
-    model: { backend: claude, model: claude-sonnet-4-6 }
-    role: technical-writer
-    inputs: [spec.md, breakdown.md]
-    tools: []
+  - id: design-tickets
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [feature.md, analysis.md]
+    tools: [Read, Grep, Glob]
     output: tickets-draft.md
 
   - id: create
@@ -32,4 +32,4 @@ steps:
     output: tickets.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [planning, confluence, mcp-jira, mcp-confluence, claude]
+tags: [planning, roadmap, productboard, mcp-jira, claude]

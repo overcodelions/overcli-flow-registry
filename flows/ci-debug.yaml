@@ -1,13 +1,28 @@
 name: Debug CI failure
-description: Diagnose a failing CI run from logs + config
+description: Gather CI logs + config, diagnose root cause, then propose a concrete fix
 input: user_prompt
 steps:
-  - id: run
-    model: { backend: claude, model: claude-opus-4-7 }
+  - id: gather
+    model: { backend: claude, model: claude-sonnet-4-6 }
     role: researcher
     inputs: [user_prompt]
     tools: [Bash, Read, WebFetch]
+    output: context.md
+
+  - id: diagnose
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: debugger
+    inputs: [user_prompt, context.md]
+    tools: [Read, Grep, Glob, Bash]
     output: diagnosis.md
+
+  - id: propose-fix
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: implementer
+    inputs: [diagnosis.md, context.md]
+    tools: [read_file, list_dir, grep, write_file, edit_file]
+    permission_mode: acceptEdits
+    output: fix.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [debugging, ci, devops, claude]
+tags: [debugging, ci, devops, claude, codex]

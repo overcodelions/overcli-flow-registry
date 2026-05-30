@@ -11,7 +11,7 @@ debugging, analysis, communication
 
 ## Surface
 tickets, prs, issues, confluence, docs, email, calendar, roadmap,
-repo, logs, ci, infra
+productboard, feedback, repo, logs, ci, infra
 
 ## Domain
 frontend, backend, api, data, mobile, ux, devops
