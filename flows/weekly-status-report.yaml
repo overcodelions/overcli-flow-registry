@@ -1,12 +1,26 @@
 name: Weekly status report
-description: Generate a status report from Jira activity for the past 7 days
+description: Pull 7d of Jira activity, summarize themes, then format a status report
 input: user_prompt
 steps:
-  - id: run
-    model: { backend: claude, model: claude-sonnet-4-6 }
+  - id: fetch
+    model: { backend: claude, model: claude-haiku-4-5 }
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
+    output: activity.md
+
+  - id: summarize
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: researcher
+    inputs: [activity.md]
+    tools: [mcp:atlassian]
+    output: summary.md
+
+  - id: format
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: technical-writer
+    inputs: [activity.md, summary.md]
+    tools: []
     output: status.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

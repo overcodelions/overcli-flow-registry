@@ -1,0 +1,35 @@
+name: "Triage customer feedback"
+description: Read raw feedback, search Jira for duplicates, classify into bug/feature/question, then file or comment
+input: user_prompt
+steps:
+  - id: read
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [WebFetch, Read]
+    output: feedback.md
+
+  - id: search-dupes
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [feedback.md]
+    tools: [mcp:atlassian]
+    output: dupes.md
+
+  - id: classify
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [feedback.md, dupes.md]
+    tools: [Read]
+    output: classification.md
+
+  - id: file
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: shipper
+    inputs: [feedback.md, dupes.md, classification.md]
+    tools: [mcp:atlassian]
+    pause_before: true
+    output: triage.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [triage, feedback, tickets, mcp-jira, claude]

@@ -1,12 +1,26 @@
 name: Search company knowledge
-description: Search Confluence + Jira for a topic, cite sources
+description: Fan out searches across Confluence + Jira, deep-read top hits, then synthesize a cited answer
 input: user_prompt
 steps:
-  - id: run
+  - id: search
     model: { backend: claude, model: claude-sonnet-4-6 }
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
+    output: hits.md
+
+  - id: deep-read
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: researcher
+    inputs: [user_prompt, hits.md]
+    tools: [mcp:atlassian]
+    output: notes.md
+
+  - id: synthesize
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: technical-writer
+    inputs: [user_prompt, hits.md, notes.md]
+    tools: []
     output: answer.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

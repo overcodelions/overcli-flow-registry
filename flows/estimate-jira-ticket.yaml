@@ -1,19 +1,34 @@
 name: Estimate Jira ticket
-description: Read a Jira key + repo, propose story points and risks
+description: Fetch the ticket, scope it against the repo, weigh risks, then deliver story points with rationale
 input: user_prompt
 steps:
+  - id: fetch
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [mcp:atlassian]
+    output: ticket.md
+
   - id: research
     model: { backend: claude, model: claude-sonnet-4-6 }
     role: researcher
-    inputs: [user_prompt]
-    tools: [Read, Grep, Glob, mcp:atlassian]
+    inputs: [ticket.md]
+    tools: [Read, Grep, Glob]
     output: research.md
-  - id: plan
+
+  - id: estimate
     model: { backend: claude, model: claude-opus-4-7 }
     role: planner
-    inputs: [user_prompt, research.md]
+    inputs: [ticket.md, research.md]
     tools: [Read, Grep, Glob]
     output: estimate.md
+
+  - id: format
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: technical-writer
+    inputs: [estimate.md]
+    tools: []
+    output: report.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
 tags: [planning, tickets, mcp-jira, claude]

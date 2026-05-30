@@ -1,13 +1,35 @@
 name: On-call runbook
-description: Convert an incident write-up into a reusable runbook
+description: Read the incident write-up, extract canonical steps, draft a runbook, then review for completeness
 input: user_prompt
 steps:
-  - id: run
-    model: { backend: claude, model: claude-opus-4-7 }
+  - id: read
+    model: { backend: claude, model: claude-sonnet-4-6 }
     role: researcher
     inputs: [user_prompt]
     tools: [Read, WebFetch]
+    output: incident.md
+
+  - id: extract
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [incident.md]
+    tools: [Read, Grep, Glob]
+    output: steps.md
+
+  - id: draft
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: technical-writer
+    inputs: [incident.md, steps.md]
+    tools: [read_file, write_file]
+    permission_mode: acceptEdits
+    output: draft.md
+
+  - id: review
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [steps.md, draft.md]
+    tools: [Read]
     output: runbook.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [operations, docs, infra, claude]
+tags: [operations, docs, infra, claude, codex]

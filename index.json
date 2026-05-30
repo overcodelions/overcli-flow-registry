@@ -3,614 +3,391 @@
     {
       "id": "adr-from-decision",
       "name": "Architecture Decision Record",
-      "description": "Produce an ADR from a one-paragraph decision",
+      "description": "Research existing ADRs + context, design alternatives, draft the ADR, then review for completeness",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "design",
-        "docs",
-        "claude"
-      ],
-      "sha256": "1e0d03278893a42c30737208da9e8e9c2584d3345c73335e5474c875ff972523",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["design", "docs", "claude", "codex"],
+      "sha256": "5d55e69ebb8a7fe52b69887c03886f2308e11146330ba13ec790b682502fc555",
       "yaml_url": "flows/adr-from-decision.yaml"
     },
     {
       "id": "analyze-stack-trace",
       "name": "Analyze stack trace",
-      "description": "Diagnose a stack trace against the codebase",
+      "description": "Parse the trace, locate frames in the codebase, diagnose root cause, then propose a fix",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "debugging",
-        "logs",
-        "repo",
-        "claude"
-      ],
-      "sha256": "3c4c0eab141b75707b6329d28e90669f3662dcadccfa9f99a6953d6363f9584c",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["debugging", "logs", "repo", "claude", "codex"],
+      "sha256": "be101ffa10c6f20156a8620aacd692013e108e2c83c27f1111b2110677a9436e",
       "yaml_url": "flows/analyze-stack-trace.yaml"
     },
     {
       "id": "api-contract-design",
       "name": "API contract design",
-      "description": "Design REST/GraphQL endpoints with schemas",
+      "description": "Research existing endpoints, design the new contract, draft schemas, then adversarially review",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "design",
-        "api",
-        "backend",
-        "claude"
-      ],
-      "sha256": "dee6f9abbdf813fb7fe69785d224018f66a71f0fe681feb34db591e7731078a5",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["design", "api", "backend", "claude", "codex"],
+      "sha256": "d79934d7cef1c32d770c26e10d5e0d0a564e5bfd47ec9c6f6848fc4764bd0a44",
       "yaml_url": "flows/api-contract-design.yaml"
     },
     {
       "id": "changelog-from-commits",
       "name": "Changelog from commits",
-      "description": "Group recent commits by type and emit CHANGELOG entries",
+      "description": "Pull recent commits, group by conventional type, then emit polished CHANGELOG entries",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "documentation",
-        "repo",
-        "release",
-        "claude"
-      ],
-      "sha256": "b8a5fe4556b77d2cad6335853431545bc38bff12170077c5e88579db98dc0688",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["documentation", "repo", "release", "claude", "codex"],
+      "sha256": "0e99b4ee99097d1992415f332b9d7e08f0f8ed6173faf5d781061edd8d9f1a27",
       "yaml_url": "flows/changelog-from-commits.yaml"
     },
     {
       "id": "ci-debug",
       "name": "Debug CI failure",
-      "description": "Diagnose a failing CI run from logs + config",
+      "description": "Gather CI logs + config, diagnose root cause, then propose a concrete fix",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "debugging",
-        "ci",
-        "devops",
-        "claude"
-      ],
-      "sha256": "30f2a137d72446318edbfc7fa3bde646a9cbaae326befcbf3e14fe8a058e6f6f",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["debugging", "ci", "devops", "claude", "codex"],
+      "sha256": "9121a4fc2ccf7a3deb0665585fc882a4b717543114aa412ca005dbc8a9b25ff9",
       "yaml_url": "flows/ci-debug.yaml"
     },
     {
       "id": "close-stale-issues",
       "name": "Close stale issues",
-      "description": "Identify stale issues, draft close comments",
+      "description": "List issues, filter for staleness, draft close comments, then post on approval",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "operations",
-        "issues",
-        "repo",
-        "claude"
-      ],
-      "sha256": "d2e6e2a1b58012a06d0752697e16fe4d091558f7aa6ba1f8b57a1938639b4d6b",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["operations", "issues", "repo", "claude"],
+      "sha256": "a06cc310d4330e85731da65b6efb5c8843c2a9d63e4d10b4684bfff048461c0d",
       "yaml_url": "flows/close-stale-issues.yaml"
     },
     {
       "id": "code-review",
       "name": "Code Review",
-      "description": "Review a code change for bugs, security issues, and quality improvements",
+      "description": "Survey the diff, deeply review for bugs and security, adversarially verify findings, format a final report",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "review",
-        "quality",
-        "claude"
-      ],
-      "sha256": "a846692c91f62943b70b90f73c46905e9364dbc5b7808f8882eab75787a742d5",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["review", "quality", "claude"],
+      "sha256": "e3f0791aa2835d1322b7fa0a8a9519ffcba2e11e6665b326a67dd90915aa4d2b",
       "yaml_url": "flows/code-review.yaml"
     },
     {
       "id": "confluence-knowledge-search",
       "name": "Search company knowledge",
-      "description": "Search Confluence + Jira for a topic, cite sources",
+      "description": "Fan out searches across Confluence + Jira, deep-read top hits, then synthesize a cited answer",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "research",
-        "confluence",
-        "mcp-confluence",
-        "claude"
-      ],
-      "sha256": "c8c3fe668b3754e424c781f26cf84ffaa68ea1df8764dc6e23d48f2c40f7ba06",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["research", "confluence", "mcp-confluence", "claude"],
+      "sha256": "013c0173db3615d708efb0d47ec278f9e8ddb78debac2822f09025dcbe2f31c5",
       "yaml_url": "flows/confluence-knowledge-search.yaml"
     },
     {
       "id": "coverage-gap-report",
       "name": "Coverage gap report",
-      "description": "Identify untested behavior in recently changed code",
+      "description": "Diff recent changes, analyze test coverage, then format a gap report ranked by risk",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "testing",
-        "analysis",
-        "repo",
-        "claude"
-      ],
-      "sha256": "826860f4adeb12505282d107ca68252acb1ac8205c2235bff2ae9f72e8eef881",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["testing", "analysis", "repo", "claude"],
+      "sha256": "92fc991fb5af0c44ed0c396b9a4acccb456a013748b82beb1e41bcad093d5bd0",
       "yaml_url": "flows/coverage-gap-report.yaml"
+    },
+    {
+      "id": "customer-feedback-triage",
+      "name": "Triage customer feedback",
+      "description": "Read raw feedback, search Jira for duplicates, classify into bug/feature/question, then file or comment",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["triage", "feedback", "tickets", "mcp-jira", "claude"],
+      "sha256": "32e7cf63f049f07a883346fa3f51316c865241f3c2d73b3330d86b8aa7346928",
+      "yaml_url": "flows/customer-feedback-triage.yaml"
     },
     {
       "id": "data-model-design",
       "name": "Data model design",
-      "description": "Propose tables/indexes/constraints for a feature",
+      "description": "Research existing schema, design new tables/indexes/constraints, draft DDL, then review for safety",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "design",
-        "data",
-        "backend",
-        "claude"
-      ],
-      "sha256": "5395c419fa800be9555f0eba63f308701943b07fd2b66c74e114de9c25277aff",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["design", "data", "backend", "claude", "codex"],
+      "sha256": "dd8955e131bcc9ef4932bdf1980addefe4e6cccfd07aa25b02c2dfaa485467f8",
       "yaml_url": "flows/data-model-design.yaml"
     },
     {
       "id": "dead-code-finder",
       "name": "Dead-code finder",
-      "description": "Find symbols with no references and propose deletions",
+      "description": "Scan for unreferenced symbols, verify each candidate is truly dead, then format a deletion plan",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "refactor",
-        "repo",
-        "analysis",
-        "claude"
-      ],
-      "sha256": "17e1a4c6ec08fd0f96b31d0a8414ef784bb033822226292e62e97aae797de29f",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["refactor", "repo", "analysis", "claude"],
+      "sha256": "304e37c1708fa47a9868cb31ac2720f69bfe1676a7bf613a8720bcf112166fe0",
       "yaml_url": "flows/dead-code-finder.yaml"
     },
     {
       "id": "debug-logs",
       "name": "Debug Error Logs",
-      "description": "Analyze error logs and provide diagnosis and suggested fixes",
+      "description": "Diagnose error logs, locate the failing code, draft a fix, then verify the fix preserves behavior",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "debugging",
-        "logs",
-        "analysis",
-        "claude"
-      ],
-      "sha256": "e3c0c5c35be7f299e7bf8599b595d9ef04ca3e2a976beb72c125e7a0923c7e1c",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["debugging", "logs", "claude", "codex"],
+      "sha256": "a2452616d6eecb837947136820ded63dac1814823338c885bf0f7921f029502a",
       "yaml_url": "flows/debug-logs.yaml"
     },
     {
       "id": "dependency-upgrade-audit",
       "name": "Dependency upgrade audit",
-      "description": "Audit deps for outdated, vulnerable, or breaking upgrades",
+      "description": "Scan installed deps, cross-check vulnerability feeds, analyze breakage risk, then format an upgrade plan",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "operations",
-        "security",
-        "devops",
-        "claude"
-      ],
-      "sha256": "581148ffc1567e76531c5fb50c47bf0b8f89a4b17d5fd939ea3280e9e33c3710",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["operations", "security", "devops", "claude"],
+      "sha256": "f0be8a15ae28a99cb86372bce83cd5209147ea350dab027104489d9ae8242cc1",
       "yaml_url": "flows/dependency-upgrade-audit.yaml"
     },
     {
       "id": "dockerfile-review",
       "name": "Dockerfile review",
-      "description": "Review Dockerfile for size, security, layer cache issues",
+      "description": "Read the Dockerfile and context, review for size/security/cache issues, then draft concrete fixes",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "review",
-        "infra",
-        "devops",
-        "claude"
-      ],
-      "sha256": "7543d8bcea7b5438da114ecf26c9d4397f3c5256f59a1ea881495afdf3085ac4",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["review", "infra", "devops", "claude", "codex"],
+      "sha256": "68eb9338ba8cc293359e7c22f1b03d6c7a50d466e7a646e363fe4fe751a90c9b",
       "yaml_url": "flows/dockerfile-review.yaml"
     },
     {
       "id": "docs-from-code",
       "name": "Generate Documentation",
-      "description": "Create documentation from source code and existing docs",
+      "description": "Survey code, design a doc outline, draft each section, then polish for accuracy and prose",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "documentation",
-        "code",
-        "claude"
-      ],
-      "sha256": "3daf4b2fb71612845d45e066167cca73b9f692c937c53234a29ef903e5790ed4",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["documentation", "docs", "repo", "claude", "codex"],
+      "sha256": "8fd88cd85b740abf629d7353a345d2ae97aa8731c36d7c47459d7b072950aecd",
       "yaml_url": "flows/docs-from-code.yaml"
     },
     {
       "id": "estimate-jira-ticket",
       "name": "Estimate Jira ticket",
-      "description": "Read a Jira key + repo, propose story points and risks",
+      "description": "Fetch the ticket, scope it against the repo, weigh risks, then deliver story points with rationale",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "planning",
-        "tickets",
-        "mcp-jira",
-        "claude"
-      ],
-      "sha256": "133cde1488c9a9f887f7b44fd6ef49361431cbdf8ece1e95790d2598c801b58b",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["planning", "tickets", "mcp-jira", "claude"],
+      "sha256": "2f5b7677b5f63b789810154e330d792293a54f0335ce017dd668f0d74323a8f4",
       "yaml_url": "flows/estimate-jira-ticket.yaml"
     },
     {
       "id": "flaky-test-hunter",
       "name": "Flaky test hunter",
-      "description": "Find flaky tests from CI logs and propose fixes",
+      "description": "Gather CI logs, identify flaky tests, diagnose causes, then draft fixes",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "testing",
-        "ci",
-        "debugging",
-        "claude"
-      ],
-      "sha256": "cb851b593fd6d5a3390c61592d07cba9da05d5c4741e3bd5410d8bdf740ef530",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["testing", "ci", "debugging", "claude", "codex"],
+      "sha256": "1bb37bbbcd2fc7601111db15925af40c5395a9b0deaf5f9af23b4c13d6bf4a9c",
       "yaml_url": "flows/flaky-test-hunter.yaml"
+    },
+    {
+      "id": "incident-postmortem",
+      "name": "Incident postmortem from notes",
+      "description": "Reconstruct the timeline, analyze root cause + contributing factors, draft a postmortem, then review for blamelessness",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["operations", "docs", "infra", "claude", "codex"],
+      "sha256": "03aaefe7f76a9f2fa41a55d5555437736b5d4b212b45676b1dbe78da4a033a84",
+      "yaml_url": "flows/incident-postmortem.yaml"
     },
     {
       "id": "jira-to-pr",
       "name": "Jira ticket to PR",
-      "description": "Plan from a Jira key, implement locally, review, ship",
+      "description": "Fetch the ticket, plan, implement, review with auto-bounce, then open a PR",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "tickets",
-        "implementation",
-        "mcp-jira",
-        "claude",
-        "ollama"
-      ],
-      "sha256": "83d966b6f764d2672960a2a4a27ca9a35da7dc93ead090d9b62e1aad07126f9b",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["tickets", "implementation", "mcp-jira", "claude", "codex"],
+      "sha256": "6f5911b605da79efc4e2e5db310b2f827ef58dd1caf313ea531fc80acd109167",
       "yaml_url": "flows/jira-to-pr.yaml"
     },
     {
       "id": "license-audit",
       "name": "License audit",
-      "description": "Scan deps + LICENSE files and flag conflicts",
+      "description": "Inventory dep licenses + repo LICENSE files, analyze for conflicts, then format an audit report",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "operations",
-        "security",
-        "devops",
-        "claude"
-      ],
-      "sha256": "f2d832b913cc1da1eb5ac9f53aa63ae5b8e88d63b282a24c0b137762f71ecae2",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["operations", "security", "devops", "claude"],
+      "sha256": "7a28e2e17da24b46e193816d95dc7a4981aed6e48a0015ac0bfdc111c48cad22",
       "yaml_url": "flows/license-audit.yaml"
     },
     {
       "id": "migration-plan",
       "name": "Data migration plan",
-      "description": "Plan an online schema/data migration with rollback",
+      "description": "Survey current schema + scale, design an online migration with rollback, draft scripts, then review for safety",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "migration",
-        "data",
-        "planning",
-        "claude"
-      ],
-      "sha256": "36e6908bc9023cee02b92e56cc106d5fecd7b420d1c8c9f3e850e518f768b6a2",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["migration", "data", "planning", "claude", "codex"],
+      "sha256": "edaa5b1a0d2f02758ef6f2d5ef56e7a6c8adbf4b3c9af5e1f01bcf0c6d8d93ac",
       "yaml_url": "flows/migration-plan.yaml"
     },
     {
       "id": "on-call-runbook",
       "name": "On-call runbook",
-      "description": "Convert an incident write-up into a reusable runbook",
+      "description": "Read the incident write-up, extract canonical steps, draft a runbook, then review for completeness",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "operations",
-        "docs",
-        "infra",
-        "claude"
-      ],
-      "sha256": "a48d86fa423c19d622e84faeb9574c779d0e9ac38c6dbb6313515f0c06069d9b",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["operations", "docs", "infra", "claude", "codex"],
+      "sha256": "06c40d1932393df47653686859fb7fb9b691c4911427d8916c16f8ce9fb3fadd",
       "yaml_url": "flows/on-call-runbook.yaml"
     },
     {
       "id": "onboarding-doc",
       "name": "Onboarding doc",
-      "description": "Generate an onboarding guide from this repo",
+      "description": "Survey the repo, outline an onboarding guide, draft each section, then polish",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "documentation",
-        "docs",
-        "repo",
-        "claude"
-      ],
-      "sha256": "c54723703607c423d06092ccd1cb9e91580680c6b3a5cd05a8ca85641fc66f34",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["documentation", "docs", "repo", "claude", "codex"],
+      "sha256": "a835fee90bce6ddb081690de6df283cc83bddeea92aefb57184829b5c2c15bb3",
       "yaml_url": "flows/onboarding-doc.yaml"
     },
     {
       "id": "pr-thorough-review",
       "name": "Thorough PR review",
-      "description": "Multi-pass adversarial review of the current diff",
+      "description": "Map the diff, run parallel correctness and security passes, then synthesize a verified review",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "review",
-        "prs",
-        "repo",
-        "claude"
-      ],
-      "sha256": "b1a6c2d57b3cd397069a8fce4867d60bebb3e41729a51a0d1e2de46cb0bc0609",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["review", "prs", "repo", "claude"],
+      "sha256": "7db503018cf7b628731118d3175fa69815b468a7a3ae8f64ff5cd839b8b9b69b",
       "yaml_url": "flows/pr-thorough-review.yaml"
+    },
+    {
+      "id": "product-to-jira",
+      "name": "Product idea → Jira tickets",
+      "description": "Brief the idea, break into epic + stories, draft tickets, then create them in Jira",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["planning", "roadmap", "tickets", "mcp-jira", "claude"],
+      "sha256": "076cfceb25eb527b6402e82bf37ba803d57c93e4f8a77daf4343ded85d3f5554",
+      "yaml_url": "flows/product-to-jira.yaml"
+    },
+    {
+      "id": "productboard-to-jira",
+      "name": "Productboard feature → Jira tickets",
+      "description": "Fetch the Productboard feature, analyze scope, design epic + tickets, then create them in Jira",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["planning", "roadmap", "productboard", "mcp-jira", "claude"],
+      "sha256": "fee1d4bf1889d9e3b7ad1655276e240ccb5b0be69428a922400abcf3273abe07",
+      "yaml_url": "flows/productboard-to-jira.yaml"
     },
     {
       "id": "publish-status-to-confluence",
       "name": "Publish status to Confluence",
-      "description": "Build a status report and draft a Confluence page",
+      "description": "Pull recent activity, summarize, draft a Confluence-ready page, then publish",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "communication",
-        "confluence",
-        "mcp-confluence",
-        "claude"
-      ],
-      "sha256": "d98b853dd58d6522c6f0978423b2e4179a537a52052ffe1cbae421a75e1b6f62",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["communication", "confluence", "mcp-confluence", "claude", "codex"],
+      "sha256": "8f6b3b55a53a8541b134149e1c1661356375c6c877061315bcfd31d3193a83fe",
       "yaml_url": "flows/publish-status-to-confluence.yaml"
     },
     {
       "id": "release-notes-from-prs",
       "name": "Release notes from PRs",
-      "description": "Generate release notes from merged PRs since the last tag",
+      "description": "Gather merged PRs since last tag, categorize, then write user-facing release notes",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "release",
-        "prs",
-        "repo",
-        "claude"
-      ],
-      "sha256": "6b497c7aa0a9c71d2baf18f0b78450015a45d31a375b2836f502cafac4c433e0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["release", "prs", "repo", "claude"],
+      "sha256": "e1c031a24fd002683c7ad7425c80faab5d70c847cd262dc7311a092843d0e6b6",
       "yaml_url": "flows/release-notes-from-prs.yaml"
     },
     {
       "id": "security-review",
       "name": "Security review",
-      "description": "Scan the diff for OWASP-style issues",
+      "description": "Map the diff, scan for OWASP-style issues, adversarially verify each finding, then format a report",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "security",
-        "review",
-        "repo",
-        "claude"
-      ],
-      "sha256": "f47e8c746a19f7a3066916174640cf7a626c916f090db6314c5b624095114c1e",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["security", "review", "repo", "claude"],
+      "sha256": "c295639e9726a3f9c84a8e0c97c5355d421e1991dd44b7f9efad1dee7efd7581",
       "yaml_url": "flows/security-review.yaml"
     },
     {
       "id": "solve-ticket",
       "name": "Solve a ticket end-to-end",
-      "description": "Premium model plans, local Ollama implements, premium reviews with bouncing, local writes tests, premium commits and opens a PR",
+      "description": "|",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "end-to-end",
-        "planning",
-        "implementation",
-        "review",
-        "testing",
-        "ollama",
-        "claude"
-      ],
-      "sha256": "ce515a18cbc86eb4dbdab0a586b5a1d1f005c84ec491e47943c0d4172adc0e7c",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["tickets", "implementation", "mcp-jira", "claude", "codex"],
+      "sha256": "475d95298b38d6d159053892bd8916dc2494d0c3459884a4ff2aa999e13e4500",
       "yaml_url": "flows/solve-ticket.yaml"
     },
     {
       "id": "spec-to-tickets",
-      "name": "Spec to Jira tickets",
-      "description": "Read a Confluence spec URL, break it into an epic and tickets",
+      "name": "Spec → Jira tickets",
+      "description": "Fetch a Confluence spec, break it into an epic + stories, draft tickets, then create them",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "planning",
-        "confluence",
-        "mcp-jira",
-        "mcp-confluence",
-        "claude"
-      ],
-      "sha256": "80acb655f6716441aedfd8337f6a4f14b34a7422145ea67dd90f183d73242a47",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["planning", "confluence", "mcp-jira", "mcp-confluence", "claude"],
+      "sha256": "83c51a3dcced85d6596c10dd2728d4aa892102685598ceb8f9d7c4d474a79906",
       "yaml_url": "flows/spec-to-tickets.yaml"
     },
     {
       "id": "sprint-retro",
       "name": "Sprint retrospective",
-      "description": "Pull this sprint's Jira tickets, summarize wins, blockers, actions",
+      "description": "Pull sprint tickets, analyze wins/blockers/themes, then draft a retro doc",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "analysis",
-        "tickets",
-        "mcp-jira",
-        "claude"
-      ],
-      "sha256": "6749c23087515220e1cb9a931476493630e0de36fbabfecd85915bbb26381b52",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["analysis", "tickets", "mcp-jira", "claude"],
+      "sha256": "c91d97a43c85cbd7c275f190f55439128a7a967445b08e5075ab78131c3636c2",
       "yaml_url": "flows/sprint-retro.yaml"
+    },
+    {
+      "id": "support-ticket-to-bug",
+      "name": "Support ticket → Jira bug",
+      "description": "Read the ticket, search Jira for duplicates, build a reproducible context, then file the bug",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["triage", "feedback", "tickets", "mcp-jira", "claude"],
+      "sha256": "b0aa2aa02aa7ea75a82b3fdd18a4d0de46c6026795188b395b90b6698c9c9cd7",
+      "yaml_url": "flows/support-ticket-to-bug.yaml"
     },
     {
       "id": "system-design-doc",
       "name": "System design doc",
-      "description": "Research the area, produce a full design doc",
+      "description": "Research the area, design alternatives, draft a full design doc, then adversarially review",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "design",
-        "docs",
-        "claude"
-      ],
-      "sha256": "76fedeb99feec774860b44a1935fef849ee1bff15e6d3924b0db3656a46cc9c5",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["design", "docs", "claude", "codex"],
+      "sha256": "1fa890fbbf0c7acd1406dec9bd5db6af00cc27463d9c3943fc0fcfbee8955acb",
       "yaml_url": "flows/system-design-doc.yaml"
     },
     {
       "id": "terraform-plan-review",
       "name": "Terraform plan review",
-      "description": "Review a terraform plan output for blast radius",
+      "description": "Parse the plan, assess blast radius and rollback, then format a risk-ranked report",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "review",
-        "infra",
-        "devops",
-        "claude"
-      ],
-      "sha256": "513c625208526252bd4e375d996b1543e5865ddec1f4cf1d68eea7cafe1c8ad6",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["review", "infra", "devops", "claude"],
+      "sha256": "b7d7581b1ea6827b1d973185117d5284bdaa33ce2886264d3b16109ec65c57b2",
       "yaml_url": "flows/terraform-plan-review.yaml"
     },
     {
       "id": "triage-github-issue",
       "name": "Triage GitHub issue",
-      "description": "Read an issue URL, analyze repo, propose resolution",
+      "description": "Fetch the issue, explore the repo, diagnose, then propose a resolution + labels",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "triage",
-        "issues",
-        "repo",
-        "claude"
-      ],
-      "sha256": "5764aeca8bc12f3f5af627732905769954410ce6da636083e6c196de45eb47e5",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["triage", "issues", "repo", "claude"],
+      "sha256": "121b462ed49d871020a21fdb380f7a3e44e78f341963a6377428a7d13c56647b",
       "yaml_url": "flows/triage-github-issue.yaml"
     },
     {
       "id": "triage-jira-bug",
       "name": "Triage Jira bug",
-      "description": "Search Jira for dup, propose new issue or comment on existing",
+      "description": "Fetch the bug, search Jira for duplicates, diagnose against the repo, then file or comment",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "triage",
-        "tickets",
-        "mcp-jira",
-        "claude"
-      ],
-      "sha256": "8f01e3ee351b000c8eadf1f3f26a6049708d22f1166f54d76c0c5d194c4c5674",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["triage", "tickets", "mcp-jira", "claude"],
+      "sha256": "33481b78e48e9a2544b35eb4b111d8826c406b790e4067543a668f0d20ab2a94",
       "yaml_url": "flows/triage-jira-bug.yaml"
     },
     {
       "id": "weekly-status-report",
       "name": "Weekly status report",
-      "description": "Generate a status report from Jira activity for the past 7 days",
+      "description": "Pull 7d of Jira activity, summarize themes, then format a status report",
       "version": "1.0.0",
-      "author": {
-        "name": "Overcli",
-        "url": "https://github.com/overcodelions/overcli"
-      },
-      "tags": [
-        "communication",
-        "tickets",
-        "mcp-jira",
-        "claude"
-      ],
-      "sha256": "b5b0d4234214b35ba3315850051494384f8fb049b9e99dfdc69a0b216397c4be",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["communication", "tickets", "mcp-jira", "claude"],
+      "sha256": "d00dac42a92a902af8d630183ff8a8e325ca0cde51603b2a5a604449e7dd9e5c",
       "yaml_url": "flows/weekly-status-report.yaml"
     }
   ]

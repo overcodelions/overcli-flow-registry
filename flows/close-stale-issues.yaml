@@ -1,12 +1,34 @@
 name: Close stale issues
-description: Identify stale issues, draft close comments
+description: List issues, filter for staleness, draft close comments, then post on approval
 input: user_prompt
 steps:
-  - id: run
-    model: { backend: claude, model: claude-sonnet-4-6 }
+  - id: list
+    model: { backend: claude, model: claude-haiku-4-5 }
     role: researcher
     inputs: [user_prompt]
-    tools: [Bash, WebFetch]
+    tools: [Bash]
+    output: issues.md
+
+  - id: filter
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [issues.md]
+    tools: [Bash, Read, Grep]
+    output: stale.md
+
+  - id: draft
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: technical-writer
+    inputs: [stale.md]
+    tools: [Read]
+    output: comments.md
+
+  - id: post
+    model: { backend: claude, model: claude-haiku-4-5 }
+    role: shipper
+    inputs: [stale.md, comments.md]
+    tools: [Bash]
+    pause_before: true
     output: actions.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

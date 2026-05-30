@@ -1,13 +1,35 @@
 name: Onboarding doc
-description: Generate an onboarding guide from this repo
+description: Survey the repo, outline an onboarding guide, draft each section, then polish
 input: user_prompt
 steps:
-  - id: run
-    model: { backend: claude, model: claude-opus-4-7 }
+  - id: survey
+    model: { backend: claude, model: claude-sonnet-4-6 }
     role: researcher
     inputs: [user_prompt]
     tools: [Read, Grep, Glob, Bash]
+    output: survey.md
+
+  - id: outline
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [survey.md]
+    tools: [Read, Grep, Glob]
+    output: outline.md
+
+  - id: draft
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: technical-writer
+    inputs: [survey.md, outline.md]
+    tools: [read_file, write_file]
+    permission_mode: acceptEdits
+    output: draft.md
+
+  - id: polish
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: editor
+    inputs: [outline.md, draft.md]
+    tools: [Read]
     output: onboarding.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [documentation, docs, repo, claude]
+tags: [documentation, docs, repo, claude, codex]

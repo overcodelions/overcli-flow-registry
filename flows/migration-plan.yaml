@@ -1,13 +1,35 @@
 name: Data migration plan
-description: Plan an online schema/data migration with rollback
+description: Survey current schema + scale, design an online migration with rollback, draft scripts, then review for safety
 input: user_prompt
 steps:
-  - id: run
+  - id: survey
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob, Bash]
+    output: survey.md
+
+  - id: design
     model: { backend: claude, model: claude-opus-4-7 }
     role: planner
-    inputs: [user_prompt]
+    inputs: [user_prompt, survey.md]
+    tools: [Read, Grep, Glob]
+    output: design.md
+
+  - id: scripts
+    model: { backend: codex, model: gpt-5.4-mini }
+    role: implementer
+    inputs: [design.md]
+    tools: [read_file, write_file, edit_file]
+    permission_mode: acceptEdits
+    output: scripts.md
+
+  - id: review
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [design.md, scripts.md]
     tools: [Read, Grep, Glob]
     output: plan.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [migration, data, planning, claude]
+tags: [migration, data, planning, claude, codex]
