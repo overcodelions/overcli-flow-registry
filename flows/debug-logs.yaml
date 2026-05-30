@@ -1,0 +1,10 @@
+name: Debug Error Logs
+description: Analyze error logs and provide diagnosis and suggested fixes
+input: error_logs
+steps:
+  - id: analyze
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: debugger
+    inputs: [error_logs]
+    tools: [Grep]
+    output: diagnosis.md

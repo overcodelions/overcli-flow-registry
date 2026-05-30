@@ -1,0 +1,17 @@
+name: Generate Documentation
+description: Create documentation from source code and existing docs
+input: file_paths
+steps:
+  - id: read
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: code-reader
+    inputs: [file_paths]
+    tools: [Read, Grep, Glob]
+    output: code_summary.md
+
+  - id: document
+    model: { backend: claude, model: claude-opus-4-8 }
+    role: technical-writer
+    inputs: [code_summary.md]
+    tools: []
+    output: docs.md
