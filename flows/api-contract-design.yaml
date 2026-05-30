@@ -1,0 +1,13 @@
+name: API contract design
+description: Design REST/GraphQL endpoints with schemas
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [user_prompt]
+    tools: [Read, Grep]
+    output: contract.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [design, api, backend, claude]

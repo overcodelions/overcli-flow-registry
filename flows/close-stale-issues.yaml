@@ -1,0 +1,13 @@
+name: Close stale issues
+description: Identify stale issues, draft close comments
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Bash, WebFetch]
+    output: actions.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [operations, issues, repo, claude]

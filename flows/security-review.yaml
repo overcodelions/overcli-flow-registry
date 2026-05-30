@@ -1,0 +1,13 @@
+name: Security review
+description: Scan the diff for OWASP-style issues
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [user_prompt]
+    tools: [Bash, Read, Grep, Glob]
+    output: review.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [security, review, repo, claude]

@@ -1,0 +1,13 @@
+name: On-call runbook
+description: Convert an incident write-up into a reusable runbook
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Read, WebFetch]
+    output: runbook.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [operations, docs, infra, claude]

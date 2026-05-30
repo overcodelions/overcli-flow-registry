@@ -1,0 +1,13 @@
+name: Dependency upgrade audit
+description: Audit deps for outdated, vulnerable, or breaking upgrades
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Bash, Read, WebFetch]
+    output: audit.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [operations, security, devops, claude]

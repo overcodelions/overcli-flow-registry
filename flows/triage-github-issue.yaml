@@ -1,0 +1,13 @@
+name: Triage GitHub issue
+description: Read an issue URL, analyze repo, propose resolution
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob, Bash, WebFetch]
+    output: triage.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [triage, issues, repo, claude]

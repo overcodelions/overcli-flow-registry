@@ -1,0 +1,13 @@
+name: Terraform plan review
+description: Review a terraform plan output for blast radius
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [user_prompt]
+    tools: [Read, Grep]
+    output: review.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [review, infra, devops, claude]

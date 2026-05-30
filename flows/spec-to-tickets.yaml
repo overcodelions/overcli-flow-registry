@@ -1,0 +1,13 @@
+name: Spec → Jira tickets
+description: Read a Confluence spec URL, break it into an epic and tickets
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [user_prompt]
+    tools: [mcp:atlassian, WebFetch]
+    output: tickets.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [planning, confluence, mcp-jira, mcp-confluence, claude]

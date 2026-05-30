@@ -1,0 +1,13 @@
+name: Release notes from PRs
+description: Generate release notes from merged PRs since the last tag
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Bash, Read]
+    output: notes.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [release, prs, repo, claude]

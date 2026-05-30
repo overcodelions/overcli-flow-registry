@@ -1,0 +1,13 @@
+name: Analyze stack trace
+description: Diagnose a stack trace against the codebase
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob]
+    output: diagnosis.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [debugging, logs, repo, claude]
