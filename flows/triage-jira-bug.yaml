@@ -1,0 +1,13 @@
+name: Triage Jira bug
+description: Search Jira for dup, propose new issue or comment on existing
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob, mcp:atlassian]
+    output: triage.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [triage, tickets, mcp-jira, claude]

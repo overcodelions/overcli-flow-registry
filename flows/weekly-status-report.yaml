@@ -1,0 +1,13 @@
+name: Weekly status report
+description: Generate a status report from Jira activity for the past 7 days
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [mcp:atlassian]
+    output: status.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [communication, tickets, mcp-jira, claude]

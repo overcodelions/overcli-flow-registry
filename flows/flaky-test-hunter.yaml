@@ -1,0 +1,13 @@
+name: Flaky test hunter
+description: Find flaky tests from CI logs and propose fixes
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Bash, Read, Grep]
+    output: report.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [testing, ci, debugging, claude]

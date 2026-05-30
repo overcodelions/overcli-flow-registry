@@ -1,0 +1,19 @@
+name: System design doc
+description: Research the area, produce a full design doc
+input: user_prompt
+steps:
+  - id: research
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob, WebFetch]
+    output: research.md
+  - id: plan
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [user_prompt, research.md]
+    tools: [Read, Grep, Glob]
+    output: design.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [design, docs, claude]

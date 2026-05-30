@@ -1,0 +1,30 @@
+name: Jira ticket to PR
+description: Plan from a Jira key, implement locally, review, ship
+input: user_prompt
+steps:
+  - id: plan
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob, mcp:atlassian]
+    output: plan.md
+  - id: build
+    model: { backend: ollama, model: qwen2.5-coder:32b }
+    role: implementer
+    inputs: [plan.md]
+    tools: [read_file, list_dir, grep, write_file, edit_file]
+    permission_mode: acceptEdits
+    output: diff
+  - id: review
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: reviewer
+    inputs: [plan.md, diff]
+    tools: [Read, Grep, Glob]
+    on_fail:
+      action: goto
+      target: build
+      max_retries: 2
+    output: review.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [tickets, implementation, mcp-jira, claude, ollama]

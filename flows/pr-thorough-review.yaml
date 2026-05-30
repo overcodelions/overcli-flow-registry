@@ -1,0 +1,19 @@
+name: Thorough PR review
+description: Multi-pass adversarial review of the current diff
+input: user_prompt
+steps:
+  - id: research
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Bash, Read, Grep, Glob]
+    output: research.md
+  - id: plan
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [user_prompt, research.md]
+    tools: [Read, Grep, Glob]
+    output: review.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [review, prs, repo, claude]

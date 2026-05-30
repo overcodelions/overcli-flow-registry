@@ -1,0 +1,13 @@
+name: Coverage gap report
+description: Identify untested behavior in recently changed code
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Bash, Read, Grep, Glob]
+    output: report.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [testing, analysis, repo, claude]

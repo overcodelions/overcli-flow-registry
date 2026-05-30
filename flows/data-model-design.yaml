@@ -1,0 +1,13 @@
+name: Data model design
+description: Propose tables/indexes/constraints for a feature
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: planner
+    inputs: [user_prompt]
+    tools: [Read, Grep]
+    output: model.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [design, data, backend, claude]

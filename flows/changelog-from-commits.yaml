@@ -1,0 +1,13 @@
+name: Changelog from commits
+description: Group recent commits by type and emit CHANGELOG entries
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Bash, Read]
+    output: changelog.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [documentation, repo, release, claude]

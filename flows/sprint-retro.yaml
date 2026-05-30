@@ -1,0 +1,13 @@
+name: Sprint retrospective
+description: Pull this sprint's Jira tickets, summarize wins, blockers, actions
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [mcp:atlassian]
+    output: retro.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [analysis, tickets, mcp-jira, claude]

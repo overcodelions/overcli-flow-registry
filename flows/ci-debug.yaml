@@ -1,0 +1,13 @@
+name: Debug CI failure
+description: Diagnose a failing CI run from logs + config
+input: user_prompt
+steps:
+  - id: run
+    model: { backend: claude, model: claude-opus-4-7 }
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Bash, Read, WebFetch]
+    output: diagnosis.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [debugging, ci, devops, claude]
