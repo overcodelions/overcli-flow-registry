@@ -1,0 +1,10 @@
+name: Code Review
+description: Review a code change for bugs, security issues, and quality improvements
+input: code_diff
+steps:
+  - id: review
+    model: { backend: claude, model: claude-sonnet-4-6 }
+    role: code-reviewer
+    inputs: [code_diff]
+    tools: [Read, Grep, Glob]
+    output: review.md

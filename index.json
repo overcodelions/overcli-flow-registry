@@ -1,0 +1,56 @@
+{
+  "flows": [
+    {
+      "id": "code-review",
+      "name": "Code Review",
+      "description": "Review a code change for bugs, security issues, and quality improvements",
+      "version": "1.0.0",
+      "author": {
+        "name": "Overcli",
+        "url": "https://github.com/overcodelions/overcli"
+      },
+      "tags": ["review", "quality", "claude"],
+      "sha256": "a846692c91f62943b70b90f73c46905e9364dbc5b7808f8882eab75787a742d5",
+      "yaml_url": "flows/code-review.yaml"
+    },
+    {
+      "id": "debug-logs",
+      "name": "Debug Error Logs",
+      "description": "Analyze error logs and provide diagnosis and suggested fixes",
+      "version": "1.0.0",
+      "author": {
+        "name": "Overcli",
+        "url": "https://github.com/overcodelions/overcli"
+      },
+      "tags": ["debugging", "logs", "analysis", "claude"],
+      "sha256": "e3c0c5c35be7f299e7bf8599b595d9ef04ca3e2a976beb72c125e7a0923c7e1c",
+      "yaml_url": "flows/debug-logs.yaml"
+    },
+    {
+      "id": "docs-from-code",
+      "name": "Generate Documentation",
+      "description": "Create documentation from source code and existing docs",
+      "version": "1.0.0",
+      "author": {
+        "name": "Overcli",
+        "url": "https://github.com/overcodelions/overcli"
+      },
+      "tags": ["documentation", "code", "claude"],
+      "sha256": "3daf4b2fb71612845d45e066167cca73b9f692c937c53234a29ef903e5790ed4",
+      "yaml_url": "flows/docs-from-code.yaml"
+    },
+    {
+      "id": "solve-ticket",
+      "name": "Solve a ticket end-to-end",
+      "description": "Premium model plans, local Ollama implements, premium reviews with bouncing, local writes tests, premium commits and opens a PR",
+      "version": "1.0.0",
+      "author": {
+        "name": "Overcli",
+        "url": "https://github.com/overcodelions/overcli"
+      },
+      "tags": ["end-to-end", "planning", "implementation", "review", "testing", "ollama", "claude"],
+      "sha256": "ce515a18cbc86eb4dbdab0a586b5a1d1f005c84ec491e47943c0d4172adc0e7c",
+      "yaml_url": "flows/solve-ticket.yaml"
+    }
+  ]
+}
