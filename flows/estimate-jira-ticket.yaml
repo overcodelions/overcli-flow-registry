@@ -1,33 +1,41 @@
-name: Estimate Jira ticket
-description: Fetch the ticket, scope it against the repo, weigh risks, then deliver story points with rationale
+name: "Estimate Jira ticket"
+description: "Fetch the ticket, scope it against the repo, weigh risks, then deliver story points with rationale"
 input: user_prompt
+default_prompt: "Estimate the effort and story points for this ticket by analyzing its scope, dependencies, and technical complexity."
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
 steps:
   - id: fetch
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
     output: ticket.md
-
   - id: research
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_2
     role: researcher
     inputs: [ticket.md]
-    tools: [Read, Grep, Glob]
+    tools: [Read, Grep, Glob, Bash]
     output: research.md
-
   - id: estimate
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: planner
     inputs: [ticket.md, research.md]
     tools: [Read, Grep, Glob]
     output: estimate.md
-
   - id: format
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: technical-writer
     inputs: [estimate.md]
-    tools: []
+    tools: [read_file, write_file]
     output: report.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

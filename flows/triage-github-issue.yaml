@@ -1,33 +1,48 @@
-name: Triage GitHub issue
-description: Fetch the issue, explore the repo, diagnose, then propose a resolution + labels
+name: "Triage GitHub issue"
+description: "Fetch the issue, explore the repo, diagnose, then propose a resolution + labels"
 input: user_prompt
+default_prompt: |-
+  Triage this GitHub issue:
+
+  <paste issue URL or number here>
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+  - id: model_3
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
 steps:
   - id: fetch
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Bash, WebFetch]
     output: issue.md
-
   - id: explore
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_2
     role: researcher
     inputs: [issue.md]
     tools: [Read, Grep, Glob, Bash]
     output: research.md
-
   - id: diagnose
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_3
     role: debugger
     inputs: [issue.md, research.md]
     tools: [Read, Grep, Glob, Bash]
     output: diagnosis.md
-
   - id: propose
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_2
     role: technical-writer
     inputs: [issue.md, diagnosis.md]
-    tools: []
+    tools: [read_file, write_file]
     output: triage.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

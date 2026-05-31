@@ -1,23 +1,36 @@
-name: Release notes from PRs
-description: Gather merged PRs since last tag, categorize, then write user-facing release notes
+name: "Release notes from PRs"
+description: "Gather merged PRs since last tag, categorize, then write user-facing release notes"
 input: user_prompt
+default_prompt: "Generate release notes for PRs merged since the last release tag."
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+  - id: model_3
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
 steps:
   - id: gather
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Bash]
     output: prs.md
-
   - id: categorize
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_2
     role: researcher
     inputs: [prs.md]
     tools: [Bash, Read]
     output: categories.md
-
   - id: write
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_3
     role: technical-writer
     inputs: [prs.md, categories.md]
     tools: [Read]

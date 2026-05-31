@@ -1,23 +1,36 @@
-name: Changelog from commits
-description: Pull recent commits, group by conventional type, then emit polished CHANGELOG entries
+name: "Changelog from commits"
+description: "Pull recent commits, group by conventional type, then emit polished CHANGELOG entries"
 input: user_prompt
+default_prompt: "Generate a changelog entry from commits since the last tag."
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+  - id: model_3
+    name: codex:gpt-5.4-mini
+    backend: codex
+    model: gpt-5.4-mini
 steps:
   - id: gather
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Bash]
     output: commits.md
-
   - id: categorize
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_2
     role: researcher
     inputs: [commits.md]
     tools: [Bash, Read]
     output: grouped.md
-
   - id: format
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: model_3
     role: technical-writer
     inputs: [grouped.md]
     tools: [read_file, write_file]

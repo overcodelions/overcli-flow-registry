@@ -1,33 +1,45 @@
-name: Security review
-description: Map the diff, scan for OWASP-style issues, adversarially verify each finding, then format a report
+name: "Security review"
+description: "Map the diff, scan for OWASP-style issues, adversarially verify each finding, then format a report"
 input: user_prompt
+default_prompt: "Run a security review on the current branch's changes."
+participants:
+  - id: primary
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
 steps:
   - id: map
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Bash, Read, Grep, Glob]
     output: map.md
-
   - id: scan
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: reviewer
     inputs: [user_prompt, map.md]
     tools: [Read, Grep, Glob, Bash]
     output: findings.md
-
   - id: verify
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: reviewer
     inputs: [findings.md]
     tools: [Read, Grep, Glob, Bash]
     output: verified.md
-
   - id: format
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: model_3
     role: technical-writer
     inputs: [verified.md]
-    tools: []
+    tools: [read_file, write_file]
     output: review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

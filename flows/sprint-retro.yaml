@@ -1,26 +1,39 @@
-name: Sprint retrospective
-description: Pull sprint tickets, analyze wins/blockers/themes, then draft a retro doc
+name: "Sprint retrospective"
+description: "Pull sprint tickets, analyze wins/blockers/themes, then draft a retro doc"
 input: user_prompt
+default_prompt: "Analyze the completed sprint tickets and draft a retrospective covering what went well, what didn't, and action items."
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
 steps:
   - id: fetch
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
     output: tickets.md
-
   - id: analyze
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: researcher
     inputs: [tickets.md]
     tools: [mcp:atlassian]
     output: analysis.md
-
   - id: draft
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_3
     role: technical-writer
     inputs: [tickets.md, analysis.md]
-    tools: []
+    tools: [read_file, write_file]
     output: retro.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
