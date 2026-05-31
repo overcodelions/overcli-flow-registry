@@ -1,34 +1,22 @@
 name: "Triage customer feedback"
-description: Read raw feedback, search Jira for duplicates, classify into bug/feature/question, then file or comment
+description: "Read customer feedback (email/transcript/blob), search Jira for duplicates, propose a new ticket or comment"
 input: user_prompt
+default_prompt: |-
+  Triage this customer feedback:
+
+  <paste feedback here>
+participants:
+  - id: primary
+    name: Primary
+    backend: claude
+    model: claude-sonnet-4-6
+    kind: primary
 steps:
-  - id: read
-    model: { backend: claude, model: claude-sonnet-4-6 }
+  - id: triage
+    participant: primary
     role: researcher
     inputs: [user_prompt]
-    tools: [WebFetch, Read]
-    output: feedback.md
-
-  - id: search-dupes
-    model: { backend: claude, model: claude-sonnet-4-6 }
-    role: researcher
-    inputs: [feedback.md]
-    tools: [mcp:atlassian]
-    output: dupes.md
-
-  - id: classify
-    model: { backend: claude, model: claude-opus-4-7 }
-    role: planner
-    inputs: [feedback.md, dupes.md]
-    tools: [Read]
-    output: classification.md
-
-  - id: file
-    model: { backend: claude, model: claude-haiku-4-5 }
-    role: shipper
-    inputs: [feedback.md, dupes.md, classification.md]
-    tools: [mcp:atlassian]
-    pause_before: true
+    tools: [mcp:atlassian, WebFetch]
     output: triage.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

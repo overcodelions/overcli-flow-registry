@@ -1,31 +1,49 @@
-name: Jira ticket to PR
-description: Fetch the ticket, plan, implement, review with auto-bounce, then open a PR
+name: "Jira ticket to PR"
+description: "Fetch the ticket, design a plan, implement (Codex preferred, Claude fallback), review with auto-bounce, then open a PR. Automatically selects the best available backend for your environment."
 input: user_prompt
+default_prompt: |-
+  Implement this Jira ticket and open a PR:
+
+  <paste Jira ticket key or URL here>
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: codex:gpt-5.4-mini
+    backend: codex
+    model: gpt-5.4-mini
+  - id: model_4
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
 steps:
   - id: fetch
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
     output: ticket.md
-
   - id: plan
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: planner
     inputs: [ticket.md]
     tools: [Read, Grep, Glob]
     output: plan.md
-
   - id: build
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: model_3
     role: implementer
     inputs: [plan.md]
     tools: [read_file, list_dir, grep, write_file, edit_file]
-    permission_mode: acceptEdits
     output: diff
-
   - id: review
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: reviewer
     inputs: [plan.md, diff]
     tools: [Read, Grep, Glob, Bash]
@@ -34,9 +52,8 @@ steps:
       target: build
       max_retries: 2
     output: review.md
-
   - id: ship
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_4
     role: shipper
     inputs: [plan.md, diff, review.md]
     tools: [Bash]

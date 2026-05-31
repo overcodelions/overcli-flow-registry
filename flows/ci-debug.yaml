@@ -1,23 +1,39 @@
-name: Debug CI failure
-description: Gather CI logs + config, diagnose root cause, then propose a concrete fix
+name: "Debug CI failure"
+description: "Gather CI logs + config, diagnose root cause, then propose a concrete fix"
 input: user_prompt
+default_prompt: |-
+  CI failed. Investigate and propose a fix:
+
+  <paste CI failure output or link here>
+participants:
+  - id: primary
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: codex:gpt-5.4-mini
+    backend: codex
+    model: gpt-5.4-mini
 steps:
   - id: gather
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Bash, Read, WebFetch]
     output: context.md
-
   - id: diagnose
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: debugger
     inputs: [user_prompt, context.md]
     tools: [Read, Grep, Glob, Bash]
     output: diagnosis.md
-
   - id: propose-fix
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: model_3
     role: implementer
     inputs: [diagnosis.md, context.md]
     tools: [read_file, list_dir, grep, write_file, edit_file]
