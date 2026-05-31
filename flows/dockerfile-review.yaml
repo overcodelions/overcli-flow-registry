@@ -1,23 +1,36 @@
-name: Dockerfile review
-description: Read the Dockerfile and context, review for size/security/cache issues, then draft concrete fixes
+name: "Dockerfile review"
+description: "Read the Dockerfile and context, review for size/security/cache issues, then draft concrete fixes"
 input: user_prompt
+default_prompt: "Review the Dockerfile(s) in this repo for correctness, security, and image size."
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: codex:gpt-5.4-mini
+    backend: codex
+    model: gpt-5.4-mini
 steps:
   - id: read
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Read, Grep, Glob]
     output: context.md
-
   - id: review
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: reviewer
     inputs: [context.md]
     tools: [Read, Grep, WebFetch]
     output: findings.md
-
   - id: suggest-fixes
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: model_3
     role: implementer
     inputs: [context.md, findings.md]
     tools: [read_file, write_file, edit_file]

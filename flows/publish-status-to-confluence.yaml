@@ -1,31 +1,42 @@
-name: Publish status to Confluence
-description: Pull recent activity, summarize, draft a Confluence-ready page, then publish
+name: "Publish status to Confluence"
+description: "Pull recent Jira activity, summarize progress + blockers, draft a Confluence page with narrative flow, then publish"
 input: user_prompt
+default_prompt: "Create a status page summarizing project progress, completed work, and blockers for this week."
+participants:
+  - id: primary
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
 steps:
   - id: fetch
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
     output: activity.md
-
   - id: summarize
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: planner
     inputs: [user_prompt, activity.md]
     tools: [Read, Grep, Glob]
     output: summary.md
-
   - id: draft
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: primary
     role: technical-writer
     inputs: [summary.md]
     tools: [read_file, write_file]
-    permission_mode: acceptEdits
     output: page.md
-
   - id: publish
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: model_3
     role: shipper
     inputs: [page.md]
     tools: [mcp:atlassian]

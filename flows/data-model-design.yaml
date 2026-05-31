@@ -1,31 +1,46 @@
-name: Data model design
-description: Research existing schema, design new tables/indexes/constraints, draft DDL, then review for safety
+name: "Data model design"
+description: "Research existing schema, design new tables/indexes/constraints, draft DDL, then review for safety"
 input: user_prompt
+default_prompt: |-
+  Design the data model for:
+
+  <describe the feature here>
+participants:
+  - id: primary
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: codex:gpt-5.4-mini
+    backend: codex
+    model: gpt-5.4-mini
 steps:
   - id: research
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Read, Grep, Glob]
     output: research.md
-
   - id: design
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: planner
     inputs: [user_prompt, research.md]
     tools: [Read, Grep, Glob]
     output: design.md
-
   - id: ddl
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: model_3
     role: implementer
     inputs: [design.md]
     tools: [read_file, write_file, edit_file]
     permission_mode: acceptEdits
     output: ddl.md
-
   - id: review
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: reviewer
     inputs: [design.md, ddl.md]
     tools: [Read, Grep, Glob]

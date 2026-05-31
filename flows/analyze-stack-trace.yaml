@@ -1,30 +1,49 @@
-name: Analyze stack trace
-description: Parse the trace, locate frames in the codebase, diagnose root cause, then propose a fix
+name: "Analyze stack trace"
+description: "Parse the trace, locate frames in the codebase, diagnose root cause, then propose a fix"
 input: user_prompt
+default_prompt: |-
+  Analyze this stack trace and propose a fix:
+
+  <paste stack trace here>
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+  - id: model_3
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_4
+    name: codex:gpt-5.4-mini
+    backend: codex
+    model: gpt-5.4-mini
 steps:
   - id: parse
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: []
     output: frames.md
-
   - id: locate
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_2
     role: researcher
     inputs: [frames.md]
     tools: [Read, Grep, Glob]
     output: locations.md
-
   - id: diagnose
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_3
     role: debugger
     inputs: [user_prompt, frames.md, locations.md]
     tools: [Read, Grep, Glob]
     output: diagnosis.md
-
   - id: propose-fix
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: model_4
     role: implementer
     inputs: [diagnosis.md, locations.md]
     tools: [read_file, list_dir, grep, write_file, edit_file]

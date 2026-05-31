@@ -1,30 +1,42 @@
-name: Close stale issues
-description: List issues, filter for staleness, draft close comments, then post on approval
+name: "Close stale issues"
+description: "List issues, filter for staleness, draft close comments, then post on approval"
 input: user_prompt
+default_prompt: "Find stale issues in this repo and propose closure messages."
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+  - id: model_3
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
 steps:
   - id: list
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Bash]
     output: issues.md
-
   - id: filter
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_2
     role: researcher
     inputs: [issues.md]
     tools: [Bash, Read, Grep]
     output: stale.md
-
   - id: draft
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_3
     role: technical-writer
     inputs: [stale.md]
     tools: [Read]
     output: comments.md
-
   - id: post
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: shipper
     inputs: [stale.md, comments.md]
     tools: [Bash]

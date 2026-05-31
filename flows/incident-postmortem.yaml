@@ -1,35 +1,23 @@
 name: "Incident postmortem from notes"
-description: Reconstruct the timeline, analyze root cause + contributing factors, draft a postmortem, then review for blamelessness
+description: "Convert raw incident notes and timeline into a structured postmortem document"
 input: user_prompt
+default_prompt: |-
+  Write a postmortem for this incident:
+
+  <paste incident summary or link here>
+participants:
+  - id: primary
+    name: Primary
+    backend: claude
+    model: claude-opus-4-7
+    kind: primary
 steps:
-  - id: timeline
-    model: { backend: claude, model: claude-sonnet-4-6 }
-    role: researcher
+  - id: write
+    participant: primary
+    role: planner
     inputs: [user_prompt]
-    tools: [Read, Grep, Glob, WebFetch]
-    output: timeline.md
-
-  - id: root-cause
-    model: { backend: claude, model: claude-opus-4-7 }
-    role: debugger
-    inputs: [user_prompt, timeline.md]
     tools: [Read, Grep, Glob]
-    output: analysis.md
-
-  - id: draft
-    model: { backend: codex, model: gpt-5.4-mini }
-    role: technical-writer
-    inputs: [timeline.md, analysis.md]
-    tools: [read_file, write_file]
-    permission_mode: acceptEdits
-    output: draft.md
-
-  - id: review
-    model: { backend: claude, model: claude-opus-4-7 }
-    role: editor
-    inputs: [analysis.md, draft.md]
-    tools: [Read]
     output: postmortem.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
-tags: [operations, docs, infra, claude, codex]
+tags: [operations, docs, infra, claude]

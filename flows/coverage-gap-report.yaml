@@ -1,26 +1,39 @@
-name: Coverage gap report
-description: Diff recent changes, analyze test coverage, then format a gap report ranked by risk
+name: "Coverage gap report"
+description: "Diff recent changes, analyze test coverage, then format a gap report ranked by risk"
 input: user_prompt
+default_prompt: "Analyze test coverage gaps in recent code changes and prioritize by risk."
+participants:
+  - id: primary
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
 steps:
   - id: diff
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Bash, Read, Grep, Glob]
     output: changes.md
-
   - id: analyze
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: reviewer
     inputs: [changes.md]
     tools: [Bash, Read, Grep, Glob]
     output: gaps.md
-
   - id: format
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: model_3
     role: technical-writer
     inputs: [gaps.md]
-    tools: []
+    tools: [read_file, write_file]
     output: report.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

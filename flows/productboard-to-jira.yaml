@@ -1,34 +1,28 @@
 name: "Productboard feature → Jira tickets"
-description: Fetch the Productboard feature, analyze scope, design epic + tickets, then create them in Jira
+description: "Read a Productboard feature URL or description and create a Jira epic with implementation tickets"
 input: user_prompt
+default_prompt: |-
+  Convert this Productboard feature into Jira tickets:
+
+  <paste Productboard URL here>
+participants:
+  - id: primary
+    name: Primary
+    backend: claude
+    model: claude-opus-4-7
+    kind: primary
 steps:
-  - id: fetch
-    model: { backend: claude, model: claude-haiku-4-5 }
+  - id: read
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [WebFetch]
     output: feature.md
-
-  - id: analyze
-    model: { backend: claude, model: claude-opus-4-7 }
+  - id: tickets
+    participant: primary
     role: planner
     inputs: [feature.md]
-    tools: [Read, Grep, Glob]
-    output: analysis.md
-
-  - id: design-tickets
-    model: { backend: claude, model: claude-opus-4-7 }
-    role: planner
-    inputs: [feature.md, analysis.md]
-    tools: [Read, Grep, Glob]
-    output: tickets-draft.md
-
-  - id: create
-    model: { backend: claude, model: claude-haiku-4-5 }
-    role: shipper
-    inputs: [tickets-draft.md]
     tools: [mcp:atlassian]
-    pause_before: true
     output: tickets.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0

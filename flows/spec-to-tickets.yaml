@@ -1,30 +1,45 @@
-name: Spec → Jira tickets
-description: Fetch a Confluence spec, break it into an epic + stories, draft tickets, then create them
+name: "Spec → Jira tickets"
+description: "Fetch a Confluence spec, break it into an epic + stories, draft tickets, then create them"
 input: user_prompt
+default_prompt: |-
+  Break this spec into implementation tickets:
+
+  <paste spec text or Confluence URL here>
+participants:
+  - id: primary
+    name: Claude haiku 4 5
+    backend: claude
+    model: claude-haiku-4-5
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
 steps:
   - id: fetch
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian, WebFetch]
     output: spec.md
-
   - id: breakdown
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: planner
     inputs: [spec.md]
     tools: [Read, Grep, Glob]
     output: breakdown.md
-
   - id: draft
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_3
     role: technical-writer
     inputs: [spec.md, breakdown.md]
-    tools: []
+    tools: [read_file, write_file]
     output: tickets-draft.md
-
   - id: create
-    model: { backend: claude, model: claude-haiku-4-5 }
+    participant: primary
     role: shipper
     inputs: [tickets-draft.md]
     tools: [mcp:atlassian]

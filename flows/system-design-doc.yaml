@@ -1,31 +1,42 @@
-name: System design doc
-description: Research the area, design alternatives, draft a full design doc, then adversarially review
+name: "System design doc"
+description: "Research the area, design alternatives, draft a full design doc, then adversarially review"
 input: user_prompt
+default_prompt: |-
+  Write a system design doc for:
+
+  <describe the system here>
+participants:
+  - id: primary
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+    kind: primary
+  - id: model_2
+    name: codex:gpt-5.4-mini
+    backend: codex
+    model: gpt-5.4-mini
 steps:
   - id: research
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: primary
     role: researcher
     inputs: [user_prompt]
     tools: [Read, Grep, Glob, WebFetch]
     output: research.md
-
   - id: design
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: primary
     role: planner
     inputs: [user_prompt, research.md]
     tools: [Read, Grep, Glob]
     output: design.md
-
   - id: draft
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: model_2
     role: technical-writer
     inputs: [research.md, design.md]
     tools: [read_file, write_file]
     permission_mode: acceptEdits
     output: draft.md
-
   - id: review
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: primary
     role: reviewer
     inputs: [design.md, draft.md]
     tools: [Read, Grep, Glob]

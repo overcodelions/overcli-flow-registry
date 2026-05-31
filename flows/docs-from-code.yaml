@@ -1,31 +1,43 @@
-name: Generate Documentation
-description: Survey code, design a doc outline, draft each section, then polish for accuracy and prose
-input: file_paths
+name: "Generate Documentation"
+description: "Survey code, design a doc outline, draft each section, then polish for accuracy and prose"
+input: user_prompt
+default_prompt: "Generate developer documentation for this codebase."
+participants:
+  - id: primary
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+    kind: primary
+  - id: model_2
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+  - id: model_3
+    name: codex:gpt-5.4-mini
+    backend: codex
+    model: gpt-5.4-mini
 steps:
   - id: survey
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: primary
     role: code-reader
-    inputs: [file_paths]
+    inputs: [user_prompt]
     tools: [Read, Grep, Glob]
     output: code_summary.md
-
   - id: outline
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: planner
     inputs: [code_summary.md]
     tools: [Read, Grep, Glob]
     output: outline.md
-
   - id: draft
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: model_3
     role: technical-writer
     inputs: [code_summary.md, outline.md]
     tools: [read_file, list_dir, grep, write_file]
     permission_mode: acceptEdits
     output: draft.md
-
   - id: polish
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: model_2
     role: editor
     inputs: [outline.md, draft.md]
     tools: [Read, Grep, Glob]

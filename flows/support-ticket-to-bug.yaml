@@ -1,35 +1,34 @@
 name: "Support ticket → Jira bug"
-description: Read the ticket, search Jira for duplicates, build a reproducible context, then file the bug
+description: "Convert a support ticket (Zendesk/email blob) into a well-structured Jira bug after checking for duplicates"
 input: user_prompt
+default_prompt: |-
+  Convert this support ticket into a bug report:
+
+  <paste support ticket here>
+participants:
+  - id: analyst
+    name: Analyst
+    backend: claude
+    model: claude-sonnet-4-6
+    kind: worker
+  - id: author
+    name: Author
+    backend: claude
+    model: claude-opus-4-7
+    kind: primary
 steps:
-  - id: read
-    model: { backend: claude, model: claude-haiku-4-5 }
+  - id: analyze
+    participant: analyst
     role: researcher
     inputs: [user_prompt]
-    tools: [WebFetch, Read]
+    tools: [WebFetch, mcp:atlassian]
+    output: analysis.md
+  - id: ticket
+    participant: author
+    role: planner
+    inputs: [analysis.md]
+    tools: [mcp:atlassian]
     output: ticket.md
-
-  - id: search-dupes
-    model: { backend: claude, model: claude-sonnet-4-6 }
-    role: researcher
-    inputs: [ticket.md]
-    tools: [mcp:atlassian]
-    output: dupes.md
-
-  - id: reproduce
-    model: { backend: claude, model: claude-opus-4-7 }
-    role: debugger
-    inputs: [ticket.md, dupes.md]
-    tools: [Read, Grep, Glob, Bash]
-    output: repro.md
-
-  - id: file
-    model: { backend: claude, model: claude-haiku-4-5 }
-    role: shipper
-    inputs: [ticket.md, dupes.md, repro.md]
-    tools: [mcp:atlassian]
-    pause_before: true
-    output: bug.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
 version: 1.0.0
 tags: [triage, feedback, tickets, mcp-jira, claude]

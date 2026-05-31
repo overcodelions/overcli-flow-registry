@@ -1,31 +1,46 @@
-name: Debug Error Logs
-description: Diagnose error logs, locate the failing code, draft a fix, then verify the fix preserves behavior
-input: error_logs
+name: "Debug Error Logs"
+description: "Diagnose error logs, locate the failing code, draft a fix, then verify the fix preserves behavior"
+input: user_prompt
+default_prompt: |-
+  Diagnose this error and propose a fix:
+
+  <paste error logs here>
+participants:
+  - id: primary
+    name: Claude opus 4 7
+    backend: claude
+    model: claude-opus-4-7
+    kind: primary
+  - id: model_2
+    name: Claude sonnet 4 6
+    backend: claude
+    model: claude-sonnet-4-6
+  - id: model_3
+    name: codex:gpt-5.4-mini
+    backend: codex
+    model: gpt-5.4-mini
 steps:
   - id: diagnose
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: primary
     role: debugger
-    inputs: [error_logs]
+    inputs: [user_prompt]
     tools: [Read, Grep, Glob]
     output: diagnosis.md
-
   - id: locate
-    model: { backend: claude, model: claude-sonnet-4-6 }
+    participant: model_2
     role: researcher
-    inputs: [error_logs, diagnosis.md]
+    inputs: [user_prompt, diagnosis.md]
     tools: [Read, Grep, Glob, Bash]
     output: locations.md
-
   - id: fix
-    model: { backend: codex, model: gpt-5.4-mini }
+    participant: model_3
     role: implementer
     inputs: [diagnosis.md, locations.md]
     tools: [read_file, list_dir, grep, write_file, edit_file]
     permission_mode: acceptEdits
     output: patch.md
-
   - id: verify
-    model: { backend: claude, model: claude-opus-4-7 }
+    participant: primary
     role: reviewer
     inputs: [diagnosis.md, patch.md]
     tools: [Read, Grep, Glob, Bash]
