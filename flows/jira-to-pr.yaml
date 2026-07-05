@@ -20,9 +20,9 @@ participants:
     backend: codex
     model: gpt-5.4-mini
   - id: model_4
-    name: Claude sonnet 4 6
+    name: Claude sonnet 5
     backend: claude
-    model: claude-sonnet-4-6
+    model: claude-sonnet-5
 steps:
   - id: fetch
     participant: primary

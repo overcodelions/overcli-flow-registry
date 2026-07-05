@@ -11,6 +11,10 @@ participants:
     backend: claude
     model: claude-opus-4-7
     kind: primary
+  - id: model_frontier
+    name: Claude fable 5
+    backend: claude
+    model: claude-fable-5
   - id: model_2
     name: codex:gpt-5.4-mini
     backend: codex
@@ -23,7 +27,7 @@ steps:
     tools: [Read, Grep, Glob, WebFetch]
     output: research.md
   - id: design
-    participant: primary
+    participant: model_frontier
     role: planner
     inputs: [user_prompt, research.md]
     tools: [Read, Grep, Glob]
