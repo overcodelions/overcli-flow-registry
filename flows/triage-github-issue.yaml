@@ -12,9 +12,9 @@ participants:
     model: claude-haiku-4-5
     kind: primary
   - id: model_2
-    name: Claude sonnet 4 6
+    name: Claude sonnet 5
     backend: claude
-    model: claude-sonnet-4-6
+    model: claude-sonnet-5
   - id: model_3
     name: Claude opus 4 7
     backend: claude

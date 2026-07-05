@@ -9,7 +9,7 @@ participants:
   - id: analyst
     name: Analyst
     backend: claude
-    model: claude-sonnet-4-6
+    model: claude-sonnet-5
     kind: worker
   - id: author
     name: Author

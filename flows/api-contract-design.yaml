@@ -7,14 +7,18 @@ default_prompt: |-
   <describe the feature/endpoints here>
 participants:
   - id: primary
-    name: Claude sonnet 4 6
+    name: Claude sonnet 5
     backend: claude
-    model: claude-sonnet-4-6
+    model: claude-sonnet-5
     kind: primary
   - id: model_2
     name: Claude opus 4 7
     backend: claude
     model: claude-opus-4-7
+  - id: model_frontier
+    name: Claude fable 5
+    backend: claude
+    model: claude-fable-5
   - id: model_3
     name: codex:gpt-5.4-mini
     backend: codex
@@ -27,7 +31,7 @@ steps:
     tools: [Read, Grep, Glob]
     output: research.md
   - id: design
-    participant: model_2
+    participant: model_frontier
     role: planner
     inputs: [user_prompt, research.md]
     tools: [Read, Grep, Glob]

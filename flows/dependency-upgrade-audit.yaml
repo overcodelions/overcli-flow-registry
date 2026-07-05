@@ -4,9 +4,9 @@ input: user_prompt
 default_prompt: "Analyze all outdated dependencies for security vulnerabilities and upgrade risk, then recommend safe upgrade strategies."
 participants:
   - id: primary
-    name: Claude sonnet 4 6
+    name: Claude sonnet 5
     backend: claude
-    model: claude-sonnet-4-6
+    model: claude-sonnet-5
     kind: primary
   - id: model_2
     name: Claude opus 4 7

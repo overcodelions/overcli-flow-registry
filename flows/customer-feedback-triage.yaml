@@ -9,7 +9,7 @@ participants:
   - id: primary
     name: Primary
     backend: claude
-    model: claude-sonnet-4-6
+    model: claude-sonnet-5
     kind: primary
 steps:
   - id: triage
