@@ -9,13 +9,13 @@ participants:
     model: claude-sonnet-5
     kind: primary
   - id: model_2
-    name: Claude opus 4 7
+    name: Claude opus 4 8
     backend: claude
-    model: claude-opus-4-7
+    model: claude-opus-4-8
   - id: model_3
-    name: Claude haiku 4 5
+    name: Claude sonnet 5
     backend: claude
-    model: claude-haiku-4-5
+    model: claude-sonnet-5
 steps:
   - id: diff
     participant: primary

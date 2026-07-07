@@ -7,9 +7,9 @@ default_prompt: |-
   <paste spec text or Confluence URL here>
 participants:
   - id: primary
-    name: Claude haiku 4 5
+    name: Claude sonnet 5
     backend: claude
-    model: claude-haiku-4-5
+    model: claude-sonnet-5
     kind: primary
   - id: model_2
     name: Claude fable 5

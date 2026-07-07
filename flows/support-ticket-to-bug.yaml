@@ -14,7 +14,7 @@ participants:
   - id: author
     name: Author
     backend: claude
-    model: claude-opus-4-7
+    model: claude-opus-4-8
     kind: primary
 steps:
   - id: analyze

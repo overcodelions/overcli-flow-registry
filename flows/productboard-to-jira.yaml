@@ -9,7 +9,7 @@ participants:
   - id: primary
     name: Primary
     backend: claude
-    model: claude-opus-4-7
+    model: claude-opus-4-8
     kind: primary
 steps:
   - id: read
