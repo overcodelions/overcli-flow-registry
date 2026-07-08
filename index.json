@@ -7,7 +7,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["design", "docs", "claude", "codex"],
-      "sha256": "e23871e753fa025f044cb81236f82d06711e26d26edb90b7819a1438bedd7226",
+      "sha256": "f5d1d620f2bb9f1429b76fa92216bd757fa4f576102c7f1725276aa81b2f4503",
       "yaml_url": "flows/adr-from-decision.yaml"
     },
     {
@@ -17,7 +17,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["debugging", "logs", "repo", "claude", "codex"],
-      "sha256": "41a699b645e30d2ba2161dc6d0ef948b8519fa06545386ae13b87c75607564e0",
+      "sha256": "cbbebbf62c395242caeafe99f4a3ddd8f459f96316ef4335a99444a3976e8a50",
       "yaml_url": "flows/analyze-stack-trace.yaml"
     },
     {
@@ -27,7 +27,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["design", "api", "backend", "claude", "codex"],
-      "sha256": "0059cf7ff029aa21b6ff85f3674c06d724cda45a203369810b285a5d4a46c77a",
+      "sha256": "b73cb3f0105fabf118aecb5b2594e3af7b92cae5b13da34360cbad9906d84cfc",
       "yaml_url": "flows/api-contract-design.yaml"
     },
     {
@@ -37,7 +37,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["documentation", "repo", "release", "claude", "codex"],
-      "sha256": "b5b690adfce38948c22dbe03cd97f026a4b11a1ca16dc30741f413dd2d0504d2",
+      "sha256": "f0d26b90041866928994d99fd982f60fc60c84e9995ae688d05f0557ae80068f",
       "yaml_url": "flows/changelog-from-commits.yaml"
     },
     {
@@ -47,7 +47,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["debugging", "ci", "devops", "claude", "codex"],
-      "sha256": "509e984c18c72d1c89789d65decb35dcbe1dd001354d7b1e98eae5b4ee5d8d98",
+      "sha256": "691b6d7ef4fd6bcce6a7f97f29c67699944f2c54be0f90e68406d3ccde08775f",
       "yaml_url": "flows/ci-debug.yaml"
     },
     {
@@ -57,7 +57,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["operations", "issues", "repo", "claude"],
-      "sha256": "7b4c476c7fe396bbce464786aee8869b9d056dc2e08b2d4f316202b67aab3f8d",
+      "sha256": "69c9f96bec83cd45efae2bc345a803c206c3356ea7eb0571c5079ae3960f7936",
       "yaml_url": "flows/close-stale-issues.yaml"
     },
     {
@@ -67,7 +67,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["review", "quality", "claude"],
-      "sha256": "84efa0eb0dc1aa6e4adeebc1b95f4a7f265c6d104dfd40ee9bdc0db0e6176339",
+      "sha256": "329d9041980db4fdb707e9143e9913b279ac4a20e134452b1854b084db9533e0",
       "yaml_url": "flows/code-review.yaml"
     },
     {
@@ -77,7 +77,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["research", "confluence", "mcp-confluence", "claude"],
-      "sha256": "88df645a18e10e4ab5098130b5cb1b62f169eaf253fe73e00fcab1cd05dd3f88",
+      "sha256": "43bad363a0d2373ec65f8a2e1b27c2e659d5712889d8cf4d6e2ebf207691f588",
       "yaml_url": "flows/confluence-knowledge-search.yaml"
     },
     {
@@ -87,7 +87,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["testing", "analysis", "repo", "claude"],
-      "sha256": "7155b95fdd950fcb0b3ef2a997f6ec3e71f3ccb9206a520f96cf1fc8428e9eb8",
+      "sha256": "34603a74e955ddfee2fec0384da48ce4ff28891d1493f0a44c8aab59b5897f18",
       "yaml_url": "flows/coverage-gap-report.yaml"
     },
     {
@@ -107,7 +107,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["design", "data", "backend", "claude", "codex"],
-      "sha256": "337818014b08d03088438ea21c6e0647a85d290cbd9bf5064a893905d2963029",
+      "sha256": "c4263d9c3cbee6e00ec4fa5be4c1ea78b2c50987aa53d44e7c5073aad22cc82f",
       "yaml_url": "flows/data-model-design.yaml"
     },
     {
@@ -117,7 +117,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["refactor", "repo", "analysis", "claude"],
-      "sha256": "891a658ab24cba5faed3d651a8d199c7f7404ad6b3ec8efea934e4996ef6104e",
+      "sha256": "72e9e8bb60ea6599a5f0613f535b8f1531217a100ebc72f532f287b41ea8e1a9",
       "yaml_url": "flows/dead-code-finder.yaml"
     },
     {
@@ -127,7 +127,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["debugging", "logs", "claude", "codex"],
-      "sha256": "58192d49d950d5bcd85a0d0b27e7a51a20f905e1dc0b12faa90f21100baf520b",
+      "sha256": "d2e77a7fb8286d4acf2b7b9d14d9f95d7563b7d7390d69918baaeafaf2d196bc",
       "yaml_url": "flows/debug-logs.yaml"
     },
     {
@@ -137,7 +137,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["operations", "security", "devops", "claude"],
-      "sha256": "66dad004fdbe7ef080a000cf7aaadaab7a98c36ff62deab5c10534275376d887",
+      "sha256": "c5fcdd57a171c793585de187c570b679019eb9234d9e443bbd118f5ad23ff336",
       "yaml_url": "flows/dependency-upgrade-audit.yaml"
     },
     {
@@ -147,7 +147,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["review", "infra", "devops", "claude", "codex"],
-      "sha256": "97fdb1bf8cc2cef12d2591d5ef4ec834cb0544a71dc75e6d95d2effde0c7b341",
+      "sha256": "1e23697cc45c92e1da22dce3917463ecad4f31d416dafd45b883d57628a08932",
       "yaml_url": "flows/dockerfile-review.yaml"
     },
     {
@@ -157,7 +157,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["documentation", "docs", "repo", "claude", "codex"],
-      "sha256": "aae50a78006bf81a3c9d6c499392fcb2e6a1595cdf967d574896f6f0301119e0",
+      "sha256": "1b778589e0e4f367b52fbbbe90b8d8d4b00d096d9bdab67b17ec84cb18087d19",
       "yaml_url": "flows/docs-from-code.yaml"
     },
     {
@@ -167,7 +167,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["planning", "tickets", "mcp-jira", "claude"],
-      "sha256": "cfdcd941fd4a98a709c5ad0d36abb80052fcd79994a5c792fdf023cc2748de37",
+      "sha256": "5698101b513e748a325c62dd70e295a6e52f1590516101af2f6bc09a5ece9e0a",
       "yaml_url": "flows/estimate-jira-ticket.yaml"
     },
     {
@@ -177,7 +177,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["testing", "ci", "debugging", "claude", "codex"],
-      "sha256": "178d467d9d55bdc8463ae2d8820d837397889c7d26e6ce169a9cee0b932542b5",
+      "sha256": "d8b5bf44d6d1ce8fdcd5b92d3817d1114ac9838559dfeaaa8ed9bb49122a67d6",
       "yaml_url": "flows/flaky-test-hunter.yaml"
     },
     {
@@ -197,7 +197,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["tickets", "implementation", "mcp-jira", "claude", "codex"],
-      "sha256": "716190d937f9961a0a4c6596c6a5c49cf39f03908cc9f52260dfbd7e94d6f589",
+      "sha256": "8354e74f3de772be6d8021d88341e70e3125d7ae41fe5db53de217bc0e1550da",
       "yaml_url": "flows/jira-to-pr.yaml"
     },
     {
@@ -207,7 +207,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["operations", "security", "devops", "claude"],
-      "sha256": "ed71b514d8a4fbe5d725eb851934827c75c7b2809ccb01554c5567d4555c6900",
+      "sha256": "1980876aade2e9fa3b4b54b9f3c9dc6c06d7c899564b20cc7f64aeefee06dc76",
       "yaml_url": "flows/license-audit.yaml"
     },
     {
@@ -217,7 +217,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["migration", "data", "planning", "claude", "codex"],
-      "sha256": "183ba196290aa10ed12a533637af322a1fd84af22d0ed197730e0c050f225ec6",
+      "sha256": "a4be837f651cdaf345a5182b94d9bc4dc014f02a653fbd3b754ab318aa58f31e",
       "yaml_url": "flows/migration-plan.yaml"
     },
     {
@@ -227,7 +227,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["operations", "docs", "infra", "claude", "codex"],
-      "sha256": "2a3c4601a1170b94c3be08b482d7c377596ccdfa040bbe4a35e19f147514ea0d",
+      "sha256": "641bec71984a0529e5fae43eac5e182c80934a9fea6445444f1443856de61d85",
       "yaml_url": "flows/on-call-runbook.yaml"
     },
     {
@@ -237,7 +237,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["documentation", "docs", "repo", "claude", "codex"],
-      "sha256": "588b3952a07aaedb14fdbfa002f6391a36904d08428538b07f5829122440a879",
+      "sha256": "e0cac536099fcae7eafed77c17442dde3d9aef412a80bff9c3f923d3e890628e",
       "yaml_url": "flows/onboarding-doc.yaml"
     },
     {
@@ -247,7 +247,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["planning", "roadmap", "tickets", "mcp-jira", "claude"],
-      "sha256": "88cab50cc7ff64cd04babfeed082dea23b3f2468042a870196d9b480c36006d3",
+      "sha256": "44895e760f454c5a879852014a3188a253d22401ba4095c24f16c729f1f61b82",
       "yaml_url": "flows/product-to-jira.yaml"
     },
     {
@@ -257,7 +257,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["planning", "roadmap", "productboard", "mcp-jira", "claude"],
-      "sha256": "d5461cd5737d45e5457661640acad937e85114ea0483b109089d4c1b5633df68",
+      "sha256": "f7a3c0d74417f9515c56566434b6fd11a05307a344e7a7eb3f0058ff7ff92f60",
       "yaml_url": "flows/productboard-to-jira.yaml"
     },
     {
@@ -267,7 +267,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["communication", "confluence", "mcp-confluence", "claude", "codex"],
-      "sha256": "06fe4a1a938877c1ab9b47bbceedbb335843bb61f6694a285ad6976ef9d05bb4",
+      "sha256": "81c9ff1d48abfab5dd1724414b91f7cabe758f7ff701bac0d8a4900d55ceaa69",
       "yaml_url": "flows/publish-status-to-confluence.yaml"
     },
     {
@@ -277,7 +277,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["release", "prs", "repo", "claude"],
-      "sha256": "3d3d098fc77a589fa5339755a32c5423c9d36690cce17ea61e797cf203efad28",
+      "sha256": "f3c40dad84082a8f8c53e2c792bb1f9afb1b26394d514999dff85386fe4ecf44",
       "yaml_url": "flows/release-notes-from-prs.yaml"
     },
     {
@@ -287,7 +287,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["security", "review", "repo", "claude"],
-      "sha256": "40208d1358f9fc263f9339436dcdd885a935af2a48aed6912e113b8b9f9f60dd",
+      "sha256": "ea112b1d84f9aa0749b1554221d6877d4003441d0cb3dcb96766b5717f695555",
       "yaml_url": "flows/security-review.yaml"
     },
     {
@@ -297,7 +297,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["tickets", "implementation", "mcp-jira", "claude", "codex"],
-      "sha256": "3fa92bbef031ea76c4ae8e6de8c92de1ff4f6543b2afa86b35794861597fd8a6",
+      "sha256": "ad61cfadcfbaad41c49bcdab93473f20312fa940305c84a2a9c893ae07d58c2f",
       "yaml_url": "flows/solve-ticket.yaml"
     },
     {
@@ -307,7 +307,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["planning", "confluence", "mcp-jira", "mcp-confluence", "claude"],
-      "sha256": "41dbbbee792c23565b6e12690d9431864c6ce215f74f4928e788fba1a9ac96a9",
+      "sha256": "cf8609800e9907394c67a146e7cfa0e152803f055f958ca1081e376cc319e322",
       "yaml_url": "flows/spec-to-tickets.yaml"
     },
     {
@@ -317,7 +317,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["analysis", "tickets", "mcp-jira", "claude"],
-      "sha256": "23970cf726495d4ae24a2412358841f78183ace108a030a3c13c4df09afba690",
+      "sha256": "08add4c64a9f54df309b7f5bcb87455e6898125518429741feab45151fe26986",
       "yaml_url": "flows/sprint-retro.yaml"
     },
     {
@@ -327,7 +327,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["triage", "feedback", "tickets", "mcp-jira", "claude"],
-      "sha256": "1ace80e137d1fdedce13f41e2a8c7d193e39f75e07bcbcc43b2def66fde82c50",
+      "sha256": "cf2e41981671ed75f581dc69aad10ae9adbe1d15e28def9225a87a73bf0ac67f",
       "yaml_url": "flows/support-ticket-to-bug.yaml"
     },
     {
@@ -337,7 +337,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["design", "docs", "claude", "codex"],
-      "sha256": "d5d5523c6b2e1e07f34e5301fd4d2c21857a406ba1f7d48e5ae27d690dbcc8f1",
+      "sha256": "fad6ba4b5c79d638a494bd988a34d79fb5c0e7c40aaa7288492d24058365565e",
       "yaml_url": "flows/system-design-doc.yaml"
     },
     {
@@ -347,7 +347,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["review", "infra", "devops", "claude"],
-      "sha256": "1801a5c315161235b37f6f493920df7e2e9a3cc65edcbad6c8e6c80310a7377a",
+      "sha256": "a88aa6398e60328b5e692d11fa8637d15b85b7675b0f84a66ad363f9af7d4730",
       "yaml_url": "flows/terraform-plan-review.yaml"
     },
     {
@@ -357,7 +357,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["triage", "issues", "repo", "claude"],
-      "sha256": "a21cd3ce8f7df329c4b7d2c4db8f44925444b13e7ea45ced2eefde01aa4daa90",
+      "sha256": "614d0a9d922a97f6045378852e4dbb30cd3b6865452d4c6f73a1d7db61d4b160",
       "yaml_url": "flows/triage-github-issue.yaml"
     },
     {
@@ -367,7 +367,7 @@
       "version": "1.0.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["communication", "tickets", "mcp-jira", "claude"],
-      "sha256": "735ae57b719b3f11e7c12f6dd3e5bd8629827e18aecd18930572223a7544c0b8",
+      "sha256": "bdae04ea1855b9cb1e32bf4e506c23e183c520ddbd3b8d776abb91292519a6f7",
       "yaml_url": "flows/weekly-status-report.yaml"
     }
   ]
