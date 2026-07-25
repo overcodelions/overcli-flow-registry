@@ -6,34 +6,41 @@ default_prompt: |-
 
   <your question here>
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: searcher
+    name: Searcher
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: reader
+    name: Reader
     backend: claude
-    model: claude-opus-4-8
+    model: claude-opus-5
+    kind: reviewer
+  - id: writer
+    name: Writer
+    backend: claude
+    model: claude-sonnet-5
+    kind: worker
 steps:
   - id: search
-    participant: primary
+    participant: searcher
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
     output: hits.md
   - id: deep-read
-    participant: model_2
+    participant: reader
     role: researcher
     inputs: [user_prompt, hits.md]
     tools: [mcp:atlassian]
     output: notes.md
   - id: synthesize
-    participant: model_2
+    participant: writer
     role: technical-writer
     inputs: [user_prompt, hits.md, notes.md]
-    tools: [read_file, write_file]
+    tools: [Read, Write]
+    permission_mode: acceptEdits
     output: answer.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
-tags: [research, confluence, mcp-confluence, claude]
+version: 1.1.0
+tags: [research, confluence, mcp-confluence, mcp-jira, claude]

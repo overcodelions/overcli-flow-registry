@@ -3,38 +3,41 @@ description: "Inventory dep licenses + repo LICENSE files, analyze for conflicts
 input: user_prompt
 default_prompt: "Audit all project dependencies for license compliance and compatibility."
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: analyst
+    name: Analyst
     backend: claude
-    model: claude-opus-4-8
-  - id: model_3
-    name: Claude sonnet 5
+    model: claude-opus-5
+    kind: reviewer
+  - id: writer
+    name: Writer
     backend: claude
     model: claude-sonnet-5
+    kind: worker
 steps:
   - id: inventory
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
     tools: [Bash, Read, Glob]
     output: inventory.md
   - id: analyze
-    participant: model_2
+    participant: analyst
     role: reviewer
-    inputs: [inventory.md]
+    inputs: [user_prompt, inventory.md]
     tools: [Read, WebFetch]
     output: analysis.md
   - id: format
-    participant: model_3
+    participant: writer
     role: technical-writer
-    inputs: [analysis.md]
-    tools: [read_file, write_file]
+    inputs: [user_prompt, analysis.md]
+    tools: [Read, Write]
+    permission_mode: acceptEdits
     output: audit.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
-tags: [operations, security, devops, claude]
+version: 1.1.0
+tags: [operations, security, repo, devops, claude]

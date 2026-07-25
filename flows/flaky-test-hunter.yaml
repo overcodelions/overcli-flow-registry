@@ -3,45 +3,46 @@ description: "Gather CI logs, identify flaky tests, diagnose causes, then draft 
 input: user_prompt
 default_prompt: "Find flaky tests in this repo and propose fixes."
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: diagnostician
+    name: Diagnostician
     backend: claude
-    model: claude-opus-4-8
-  - id: model_3
-    name: codex:gpt-5.4-mini
+    model: claude-opus-5
+    kind: reviewer
+  - id: fixer
+    name: Fixer
     backend: codex
-    model: gpt-5.4-mini
+    model: gpt-5.6-terra
+    kind: worker
 steps:
   - id: gather
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
-    tools: [Bash, Read, Grep]
+    tools: [Bash, Read, Grep, Glob]
     output: logs.md
   - id: identify
-    participant: model_2
+    participant: diagnostician
     role: debugger
-    inputs: [logs.md]
+    inputs: [user_prompt, logs.md]
     tools: [Bash, Read, Grep, Glob]
     output: flakes.md
   - id: diagnose
-    participant: model_2
+    participant: diagnostician
     role: debugger
-    inputs: [flakes.md]
-    tools: [Read, Grep, Glob]
+    inputs: [user_prompt, flakes.md]
+    tools: [Read, Grep, Glob, Bash]
     output: diagnosis.md
   - id: propose-fix
-    participant: model_3
+    participant: fixer
     role: implementer
-    inputs: [diagnosis.md]
-    tools: [read_file, list_dir, grep, write_file, edit_file]
-    permission_mode: acceptEdits
+    inputs: [user_prompt, diagnosis.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
     output: report.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.1.0
 tags: [testing, ci, debugging, claude, codex]

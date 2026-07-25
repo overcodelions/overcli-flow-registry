@@ -6,39 +6,40 @@ default_prompt: |-
 
   <paste CI failure output or link here>
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: diagnostician
+    name: Diagnostician
     backend: claude
-    model: claude-opus-4-8
-  - id: model_3
-    name: codex:gpt-5.4-mini
+    model: claude-opus-5
+    kind: reviewer
+  - id: fixer
+    name: Fixer
     backend: codex
-    model: gpt-5.4-mini
+    model: gpt-5.6-terra
+    kind: worker
 steps:
   - id: gather
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
-    tools: [Bash, Read, WebFetch]
+    tools: [Bash, Read, Grep, Glob, WebFetch]
     output: context.md
   - id: diagnose
-    participant: model_2
+    participant: diagnostician
     role: debugger
     inputs: [user_prompt, context.md]
     tools: [Read, Grep, Glob, Bash]
     output: diagnosis.md
   - id: propose-fix
-    participant: model_3
+    participant: fixer
     role: implementer
-    inputs: [diagnosis.md, context.md]
-    tools: [read_file, list_dir, grep, write_file, edit_file]
-    permission_mode: acceptEdits
+    inputs: [user_prompt, diagnosis.md, context.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
     output: fix.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.1.0
 tags: [debugging, ci, devops, claude, codex]

@@ -1,50 +1,56 @@
 name: "Debug Error Logs"
-description: "Diagnose error logs, locate the failing code, draft a fix, then verify the fix preserves behavior"
+description: "Diagnose error logs, locate the failing code, draft a fix, then verify the fix with an independent reviewer"
 input: user_prompt
 default_prompt: |-
   Diagnose this error and propose a fix:
 
   <paste error logs here>
 participants:
-  - id: primary
-    name: Claude opus 4 8
+  - id: diagnostician
+    name: Diagnostician
     backend: claude
-    model: claude-opus-4-8
+    model: claude-opus-5
     kind: primary
-  - id: model_2
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
-  - id: model_3
-    name: codex:gpt-5.4-mini
+    kind: custom
+  - id: fixer
+    name: Fixer
     backend: codex
-    model: gpt-5.4-mini
+    model: gpt-5.6-terra
+    kind: worker
+  - id: verifier
+    name: Verifier
+    backend: claude
+    model: claude-opus-5
+    kind: reviewer
 steps:
   - id: diagnose
-    participant: primary
+    participant: diagnostician
     role: debugger
     inputs: [user_prompt]
     tools: [Read, Grep, Glob]
     output: diagnosis.md
   - id: locate
-    participant: model_2
+    participant: scout
     role: researcher
     inputs: [user_prompt, diagnosis.md]
     tools: [Read, Grep, Glob, Bash]
     output: locations.md
   - id: fix
-    participant: model_3
+    participant: fixer
     role: implementer
-    inputs: [diagnosis.md, locations.md]
-    tools: [read_file, list_dir, grep, write_file, edit_file]
-    permission_mode: acceptEdits
+    inputs: [user_prompt, diagnosis.md, locations.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
     output: patch.md
   - id: verify
-    participant: primary
+    participant: verifier
     role: reviewer
-    inputs: [diagnosis.md, patch.md]
+    inputs: [user_prompt, diagnosis.md, patch.md]
     tools: [Read, Grep, Glob, Bash]
     output: report.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
-tags: [debugging, logs, claude, codex]
+version: 1.1.0
+tags: [debugging, logs, repo, claude, codex]

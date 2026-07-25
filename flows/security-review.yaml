@@ -1,46 +1,54 @@
 name: "Security review"
-description: "Map the diff, scan for OWASP-style issues, adversarially verify each finding, then format a report"
+description: "Map the diff, scan for OWASP-style issues, adversarially verify each finding with a fresh reviewer, then format a report"
 input: user_prompt
 default_prompt: "Run a security review on the current branch's changes."
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: scanner
+    name: Scanner
     backend: claude
-    model: claude-opus-4-8
-  - id: model_3
-    name: Claude sonnet 5
+    model: claude-opus-5
+    kind: custom
+  - id: verifier
+    name: Verifier
+    backend: claude
+    model: claude-opus-5
+    kind: reviewer
+  - id: writer
+    name: Writer
     backend: claude
     model: claude-sonnet-5
+    kind: worker
 steps:
   - id: map
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
     tools: [Bash, Read, Grep, Glob]
     output: map.md
   - id: scan
-    participant: model_2
-    role: reviewer
+    participant: scanner
+    role: security-reviewer
     inputs: [user_prompt, map.md]
     tools: [Read, Grep, Glob, Bash]
     output: findings.md
   - id: verify
-    participant: model_2
-    role: reviewer
-    inputs: [findings.md]
+    participant: verifier
+    role: adversarial-reviewer
+    inputs: [user_prompt, map.md, findings.md]
     tools: [Read, Grep, Glob, Bash]
     output: verified.md
   - id: format
-    participant: model_3
+    participant: writer
     role: technical-writer
-    inputs: [verified.md]
-    tools: [read_file, write_file]
+    inputs: [user_prompt, verified.md]
+    tools: [Read, Write]
+    permission_mode: acceptEdits
     output: review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.1.0
 tags: [security, review, repo, claude]

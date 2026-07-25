@@ -3,45 +3,52 @@ description: "Survey the repo, outline an onboarding guide, draft each section, 
 input: user_prompt
 default_prompt: "Write an onboarding doc for engineers new to this project."
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: planner
+    name: Planner
     backend: claude
-    model: claude-opus-4-8
-  - id: model_3
-    name: codex:gpt-5.4-mini
+    model: claude-opus-5
+    kind: custom
+  - id: writer
+    name: Writer
     backend: codex
-    model: gpt-5.4-mini
+    model: gpt-5.6-terra
+    kind: worker
+  - id: editor
+    name: Editor
+    backend: claude
+    model: claude-opus-5
+    kind: reviewer
 steps:
   - id: survey
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
     tools: [Read, Grep, Glob, Bash]
     output: survey.md
   - id: outline
-    participant: model_2
+    participant: planner
     role: planner
-    inputs: [survey.md]
+    inputs: [user_prompt, survey.md]
     tools: [Read, Grep, Glob]
     output: outline.md
   - id: draft
-    participant: model_3
+    participant: writer
     role: technical-writer
-    inputs: [survey.md, outline.md]
-    tools: [read_file, write_file]
+    inputs: [user_prompt, survey.md, outline.md]
+    tools: [Read, Glob, Grep, Write]
     permission_mode: acceptEdits
     output: draft.md
   - id: polish
-    participant: primary
+    participant: editor
     role: editor
-    inputs: [outline.md, draft.md]
-    tools: [Read]
+    inputs: [user_prompt, outline.md, draft.md]
+    tools: [Read, Grep, Glob]
     output: onboarding.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.1.0
 tags: [documentation, docs, repo, claude, codex]
