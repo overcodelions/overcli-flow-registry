@@ -1,50 +1,53 @@
 name: "Spec → Jira tickets"
-description: "Fetch a Confluence spec, break it into an epic + stories, draft tickets, then create them"
+description: "Fetch a Confluence spec, break it into an epic + stories, draft tickets, then create them on approval"
 input: user_prompt
 default_prompt: |-
   Break this spec into implementation tickets:
 
   <paste spec text or Confluence URL here>
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude fable 5
+  - id: planner
+    name: Planner
     backend: claude
     model: claude-fable-5
-  - id: model_3
-    name: Claude sonnet 5
+    kind: reviewer
+  - id: writer
+    name: Writer
     backend: claude
     model: claude-sonnet-5
+    kind: worker
 steps:
   - id: fetch
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian, WebFetch]
     output: spec.md
   - id: breakdown
-    participant: model_2
+    participant: planner
     role: planner
-    inputs: [spec.md]
+    inputs: [user_prompt, spec.md]
     tools: [Read, Grep, Glob]
     output: breakdown.md
   - id: draft
-    participant: model_3
+    participant: writer
     role: technical-writer
-    inputs: [spec.md, breakdown.md]
-    tools: [read_file, write_file]
+    inputs: [user_prompt, spec.md, breakdown.md]
+    tools: [Read, Write]
+    permission_mode: acceptEdits
     output: tickets-draft.md
   - id: create
-    participant: primary
+    participant: scout
     role: shipper
-    inputs: [tickets-draft.md]
+    inputs: [user_prompt, breakdown.md, tickets-draft.md]
     tools: [mcp:atlassian]
     pause_before: true
     output: tickets.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
-tags: [planning, confluence, mcp-jira, mcp-confluence, claude]
+version: 1.1.0
+tags: [planning, confluence, tickets, mcp-jira, mcp-confluence, claude]

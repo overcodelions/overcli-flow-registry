@@ -1,51 +1,58 @@
 name: "Solve a ticket end-to-end"
-description: "Fetch a Jira ticket, design a plan, implement code (Codex preferred, Claude fallback), review with auto-bounce on failure, write tests, then open a PR for final approval. Automatically selects best available backend for your environment."
+description: "Fetch a Jira ticket, design a plan, implement with a critic loop, review with auto-bounce on failure, write tests, then open a PR on approval"
 input: user_prompt
 default_prompt: |-
   Solve this ticket:
 
   <paste ticket key or URL here>
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: lead
+    name: Lead
     backend: claude
-    model: claude-opus-4-8
-  - id: model_3
-    name: codex:gpt-5.4-mini
+    model: claude-opus-5
+    kind: reviewer
+  - id: builder
+    name: Builder
     backend: codex
-    model: gpt-5.4-mini
-  - id: model_4
-    name: Claude sonnet 5
+    model: gpt-5.6-terra
+    kind: worker
+  - id: shipper
+    name: Shipper
     backend: claude
     model: claude-sonnet-5
+    kind: custom
 steps:
   - id: fetch
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
     output: ticket.md
   - id: plan
-    participant: model_2
+    participant: lead
     role: planner
-    inputs: [ticket.md]
+    inputs: [user_prompt, ticket.md]
     tools: [Read, Grep, Glob]
     output: plan.md
   - id: build
-    participant: model_3
+    participant: builder
     role: implementer
-    inputs: [plan.md]
-    tools: [read_file, list_dir, grep, write_file, edit_file]
+    inputs: [user_prompt, ticket.md, plan.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    rebound:
+      critic: { backend: claude, model: claude-opus-5 }
+      mode: review
+      max_iters: 2
     output: diff
   - id: review
-    participant: model_2
+    participant: lead
     role: reviewer
-    inputs: [plan.md, diff]
+    inputs: [user_prompt, plan.md, diff]
     tools: [Read, Grep, Glob, Bash]
     on_fail:
       action: goto
@@ -53,18 +60,18 @@ steps:
       max_retries: 2
     output: review.md
   - id: tests
-    participant: model_3
+    participant: builder
     role: test-writer
-    inputs: [diff, review.md]
-    tools: [read_file, list_dir, grep, write_file, edit_file]
+    inputs: [user_prompt, plan.md, diff, review.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
     output: diff
   - id: ship
-    participant: model_4
+    participant: shipper
     role: shipper
-    inputs: [plan.md, diff, review.md]
+    inputs: [user_prompt, plan.md, diff, review.md]
     tools: [Bash]
     pause_before: true
     output: pr_url
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.1.0
 tags: [tickets, implementation, mcp-jira, claude, codex]

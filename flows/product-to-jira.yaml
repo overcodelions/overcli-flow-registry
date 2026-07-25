@@ -1,29 +1,41 @@
 name: "Product idea → Jira tickets"
-description: "Turn a freeform product idea or feature brief into a Jira epic with implementation tickets"
+description: "Turn a freeform product idea or feature brief into a Jira epic with implementation tickets, created on approval"
 input: user_prompt
 default_prompt: |-
   Convert this product brief into Jira tickets:
 
   <paste brief here>
 participants:
-  - id: primary
-    name: Primary
+  - id: planner
+    name: Planner
     backend: claude
-    model: claude-opus-4-8
+    model: claude-opus-5
     kind: primary
+  - id: writer
+    name: Writer
+    backend: claude
+    model: claude-sonnet-5
+    kind: worker
 steps:
   - id: brief
-    participant: primary
+    participant: planner
     role: planner
     inputs: [user_prompt]
     tools: [Read, Grep, Glob]
     output: brief.md
-  - id: tickets
-    participant: primary
-    role: planner
-    inputs: [brief.md]
+  - id: draft
+    participant: writer
+    role: technical-writer
+    inputs: [user_prompt, brief.md]
+    tools: [Read]
+    output: tickets-draft.md
+  - id: create
+    participant: planner
+    role: shipper
+    inputs: [user_prompt, brief.md, tickets-draft.md]
     tools: [mcp:atlassian]
+    pause_before: true
     output: tickets.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.1.0
 tags: [planning, roadmap, tickets, mcp-jira, claude]

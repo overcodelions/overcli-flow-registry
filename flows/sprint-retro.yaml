@@ -3,38 +3,41 @@ description: "Pull sprint tickets, analyze wins/blockers/themes, then draft a re
 input: user_prompt
 default_prompt: "Analyze the completed sprint tickets and draft a retrospective covering what went well, what didn't, and action items."
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: analyst
+    name: Analyst
     backend: claude
-    model: claude-opus-4-8
-  - id: model_3
-    name: Claude sonnet 5
+    model: claude-opus-5
+    kind: reviewer
+  - id: writer
+    name: Writer
     backend: claude
     model: claude-sonnet-5
+    kind: worker
 steps:
   - id: fetch
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
     output: tickets.md
   - id: analyze
-    participant: model_2
+    participant: analyst
     role: researcher
-    inputs: [tickets.md]
+    inputs: [user_prompt, tickets.md]
     tools: [mcp:atlassian]
     output: analysis.md
   - id: draft
-    participant: model_3
+    participant: writer
     role: technical-writer
-    inputs: [tickets.md, analysis.md]
-    tools: [read_file, write_file]
+    inputs: [user_prompt, tickets.md, analysis.md]
+    tools: [Read, Write]
+    permission_mode: acceptEdits
     output: retro.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.1.0
 tags: [analysis, tickets, mcp-jira, claude]

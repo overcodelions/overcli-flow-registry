@@ -3,39 +3,41 @@ description: "Read the Dockerfile and context, review for size/security/cache is
 input: user_prompt
 default_prompt: "Review the Dockerfile(s) in this repo for correctness, security, and image size."
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: reviewer
+    name: Reviewer
     backend: claude
-    model: claude-opus-4-8
-  - id: model_3
-    name: codex:gpt-5.4-mini
+    model: claude-opus-5
+    kind: reviewer
+  - id: fixer
+    name: Fixer
     backend: codex
-    model: gpt-5.4-mini
+    model: gpt-5.6-terra
+    kind: worker
 steps:
   - id: read
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
     tools: [Read, Grep, Glob]
     output: context.md
   - id: review
-    participant: model_2
+    participant: reviewer
     role: reviewer
-    inputs: [context.md]
+    inputs: [user_prompt, context.md]
     tools: [Read, Grep, WebFetch]
     output: findings.md
   - id: suggest-fixes
-    participant: model_3
+    participant: fixer
     role: implementer
-    inputs: [context.md, findings.md]
-    tools: [read_file, write_file, edit_file]
+    inputs: [user_prompt, context.md, findings.md]
+    tools: [Read, Glob, Write, Edit]
     permission_mode: acceptEdits
     output: review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.1.0
 tags: [review, infra, devops, claude, codex]

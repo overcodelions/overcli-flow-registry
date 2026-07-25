@@ -1,47 +1,50 @@
 name: "Publish status to Confluence"
-description: "Pull recent Jira activity, summarize progress + blockers, draft a Confluence page with narrative flow, then publish"
+description: "Pull recent Jira activity, summarize progress + blockers, draft a Confluence page with narrative flow, then publish on approval"
 input: user_prompt
 default_prompt: "Create a status page summarizing project progress, completed work, and blockers for this week."
 participants:
-  - id: primary
-    name: Claude sonnet 5
+  - id: scout
+    name: Scout
     backend: claude
     model: claude-sonnet-5
     kind: primary
-  - id: model_2
-    name: Claude opus 4 8
+  - id: analyst
+    name: Analyst
     backend: claude
-    model: claude-opus-4-8
-  - id: model_3
-    name: Claude sonnet 5
+    model: claude-opus-5
+    kind: reviewer
+  - id: writer
+    name: Writer
     backend: claude
     model: claude-sonnet-5
+    kind: worker
 steps:
   - id: fetch
-    participant: primary
+    participant: scout
     role: researcher
     inputs: [user_prompt]
     tools: [mcp:atlassian]
     output: activity.md
   - id: summarize
-    participant: model_2
+    participant: analyst
     role: planner
     inputs: [user_prompt, activity.md]
     tools: [Read, Grep, Glob]
     output: summary.md
   - id: draft
-    participant: primary
+    participant: writer
     role: technical-writer
-    inputs: [summary.md]
-    tools: [read_file, write_file]
+    inputs: [user_prompt, activity.md, summary.md]
+    tools: [Read, Write]
+    permission_mode: acceptEdits
     output: page.md
   - id: publish
-    participant: model_3
+    participant: scout
     role: shipper
-    inputs: [page.md]
+    inputs: [user_prompt, page.md]
     tools: [mcp:atlassian]
     pause_before: true
     output: url.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
-tags: [communication, confluence, mcp-confluence, claude, codex]
+version: 1.1.0
+tags: [communication, confluence, tickets, mcp-jira, mcp-confluence, claude]
