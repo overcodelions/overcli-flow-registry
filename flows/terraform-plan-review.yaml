@@ -28,11 +28,19 @@ steps:
     inputs: [user_prompt]
     tools: [Read, Grep, Glob]
     output: parsed.md
+  # Reviewer-role steps GATE the run: the runtime treats "no APPROVED line"
+  # as a step failure. Flagging a risky apply is this step's job, not a
+  # failure, so it hands off forward rather than parking the run and leaving
+  # `format` unreachable.
   - id: blast-radius
     participant: reviewer
     role: reviewer
     inputs: [user_prompt, parsed.md]
     tools: [Read, Grep, Glob]
+    on_fail:
+      action: goto
+      target: format
+      max_retries: 1
     output: risk.md
   - id: format
     participant: writer
@@ -42,5 +50,5 @@ steps:
     permission_mode: acceptEdits
     output: review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [review, infra, devops, claude]

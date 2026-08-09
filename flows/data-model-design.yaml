@@ -1,5 +1,5 @@
 name: "Data model design"
-description: "Research existing schema, design new tables/indexes/constraints, draft DDL, then review for safety"
+description: "Research existing schema, design new tables/indexes/constraints, draft DDL, critique it for safety, then fold the critique into a final model"
 input: user_prompt
 default_prompt: |-
   Design the data model for:
@@ -46,12 +46,26 @@ steps:
     tools: [Read, Glob, Write, Edit]
     permission_mode: acceptEdits
     output: ddl.md
+  # A reviewer-role step GATES the run: the runtime treats "no APPROVED"
+  # line as a step failure, and what a critic emits is a verdict, not a
+  # document. So the critic produces critique.md and hands off — approved or
+  # not — to a finalize pass that produces the actual deliverable.
   - id: review
     participant: reviewer
     role: reviewer
     inputs: [user_prompt, design.md, ddl.md]
     tools: [Read, Grep, Glob]
+    on_fail:
+      action: goto
+      target: finalize
+      max_retries: 1
+    output: critique.md
+  - id: finalize
+    participant: writer
+    role: editor
+    inputs: [user_prompt, design.md, ddl.md, critique.md]
+    tools: [Read, Grep, Glob]
     output: model.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [design, data, repo, backend, claude, codex]

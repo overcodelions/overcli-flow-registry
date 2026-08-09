@@ -1,5 +1,5 @@
 name: "Jira ticket to PR"
-description: "Fetch the ticket, design a plan, implement with a critic loop, review with auto-bounce, then open a PR on approval"
+description: "Fetch the ticket, design a plan, implement with a critic loop, review, apply a single fix pass, then open a PR on approval"
 input: user_prompt
 default_prompt: |-
   Implement this Jira ticket and open a PR:
@@ -54,11 +54,35 @@ steps:
     role: reviewer
     inputs: [user_prompt, plan.md, diff]
     tools: [Read, Grep, Glob, Bash]
+    # A rejecting review goes FORWARD to the fix pass, never back to build.
+    # Bouncing to `build` re-ran the implementer against its original inputs
+    # with no sight of the review, so it had nothing new to work from and the
+    # same diff came back for the same rejection until the retries ran out.
     on_fail:
       action: goto
-      target: build
-      max_retries: 2
+      target: fix
+      max_retries: 1
     output: review.md
+  - id: fix
+    participant: builder
+    role: custom
+    system_prompt: |-
+      You are the FIX step of a multi-stage automated flow. The change is
+      already implemented and a reviewer has just examined it.
+
+      Read the review and act on it — nothing else:
+        - If the review raises blocking problems, fix exactly those. Name the
+          finding you are addressing with each change.
+        - If the review approved the work with no blocking problems, change
+          NOTHING. Reply "No changes required." and stop. Do not refactor,
+          tidy up, or add scope the reviewer did not ask for.
+
+      Do not re-implement the plan from scratch — the diff already exists.
+      Run the project's build or tests if the fix warrants it. Summarize what
+      you changed file by file, one line per file.
+    inputs: [user_prompt, plan.md, diff, review.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    output: diff
   - id: ship
     participant: shipper
     role: shipper
@@ -67,5 +91,5 @@ steps:
     pause_before: true
     output: pr_url
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [tickets, implementation, mcp-jira, claude, codex]

@@ -1,5 +1,5 @@
 name: "On-call runbook"
-description: "Read the incident write-up, extract canonical steps, draft a runbook, then review for completeness"
+description: "Read the incident write-up, extract canonical steps, draft a runbook, critique it for completeness, then fold the critique into a final runbook"
 input: user_prompt
 default_prompt: |-
   Write an on-call runbook for:
@@ -46,12 +46,26 @@ steps:
     tools: [Read, Glob, Write]
     permission_mode: acceptEdits
     output: draft.md
+  # A reviewer-role step GATES the run: the runtime treats "no APPROVED"
+  # line as a step failure, and what a critic emits is a verdict, not a
+  # document. So the critic produces critique.md and hands off — approved or
+  # not — to a finalize pass that produces the actual deliverable.
   - id: review
     participant: reviewer
     role: reviewer
     inputs: [user_prompt, steps.md, draft.md]
     tools: [Read, Grep, Glob]
+    on_fail:
+      action: goto
+      target: finalize
+      max_retries: 1
+    output: critique.md
+  - id: finalize
+    participant: writer
+    role: editor
+    inputs: [user_prompt, steps.md, draft.md, critique.md]
+    tools: [Read, Grep, Glob]
     output: runbook.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [operations, docs, infra, claude, codex]

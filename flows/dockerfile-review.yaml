@@ -25,11 +25,19 @@ steps:
     inputs: [user_prompt]
     tools: [Read, Grep, Glob]
     output: context.md
+  # Reviewer-role steps GATE the run: the runtime treats "no APPROVED line"
+  # as a step failure. Findings are the point of this flow, so the review
+  # hands off forward to the fix pass rather than parking the run and
+  # leaving `suggest-fixes` unreachable.
   - id: review
     participant: reviewer
     role: reviewer
     inputs: [user_prompt, context.md]
     tools: [Read, Grep, WebFetch]
+    on_fail:
+      action: goto
+      target: suggest-fixes
+      max_retries: 1
     output: findings.md
   - id: suggest-fixes
     participant: fixer
@@ -39,5 +47,5 @@ steps:
     permission_mode: acceptEdits
     output: review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [review, infra, devops, claude, codex]
