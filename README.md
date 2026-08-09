@@ -43,6 +43,22 @@ but every flow in this registry follows them.
   same participant that produced the work is reviewing itself with full memory of its
   own reasoning. Verification steps get a fresh participant. (Deliberate exception:
   `plan` → `review` on one participant, so the planner remembers its plan.)
+- **Give every gating reviewer step a forward path, and never a backward one.**
+  The runtime treats a `plan-reviewer` / `reviewer` / `code-reviewer` /
+  `security-reviewer` / `adversarial-reviewer` step whose artifact has no
+  `APPROVED` line as a *failed* step (`overcli/src/main/flows/runtime.ts` —
+  `isGatingReviewerRole` + `isReviewApproved`). With the default `on_fail`
+  that parks the run, so a review flow whose whole job is to report findings
+  never reaches its `format` step. Set `on_fail: {action: goto, target: <the
+  NEXT step>, max_retries: 1}` so a rejecting review flows into the step that
+  consumes it. If a gating step is the last one, add the step that consumes it
+  — a critic emits a verdict, not a deliverable.
+- **A rejected review goes to a fix pass, not back to the builder.** `goto`
+  targets must point *forward*. Bouncing to an earlier `build` step re-runs the
+  implementer against its original `inputs`, which do not include the review —
+  it has nothing new to work from, so the same diff comes back for the same
+  rejection until `max_retries` runs out. A `fix` step placed after the review,
+  taking `review.md` as an input, converges in one pass and cannot cycle.
 - **Gate anything that writes to the outside world.** Steps that create Jira tickets,
   publish Confluence pages, comment on issues, or open PRs set `pause_before: true`.
   Flows default to `bypassPermissions` when `permission_mode` is unset

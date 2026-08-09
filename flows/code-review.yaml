@@ -35,23 +35,40 @@ steps:
     inputs: [user_prompt]
     tools: [Bash, Read, Grep, Glob]
     output: survey.md
+  # Reviewer-role steps GATE the run: the runtime treats "no APPROVED line"
+  # as a step failure. For a flow whose whole deliverable is a list of
+  # findings, finding something is the expected outcome, not a failure — so
+  # each reviewer hands off forward instead of parking the run and leaving
+  # `format` unreachable.
   - id: review-correctness
     participant: correctness
     role: code-reviewer
     inputs: [user_prompt, survey.md]
     tools: [Read, Grep, Glob, Bash]
+    on_fail:
+      action: goto
+      target: review-security
+      max_retries: 1
     output: correctness.md
   - id: review-security
     participant: security
     role: security-reviewer
     inputs: [user_prompt, survey.md]
     tools: [Read, Grep, Glob, Bash]
+    on_fail:
+      action: goto
+      target: verify
+      max_retries: 1
     output: security.md
   - id: verify
     participant: verifier
     role: adversarial-reviewer
     inputs: [user_prompt, survey.md, correctness.md, security.md]
     tools: [Read, Grep, Glob, Bash]
+    on_fail:
+      action: goto
+      target: format
+      max_retries: 1
     output: verified.md
   - id: format
     participant: writer
@@ -61,5 +78,5 @@ steps:
     permission_mode: acceptEdits
     output: review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [review, prs, repo, claude]

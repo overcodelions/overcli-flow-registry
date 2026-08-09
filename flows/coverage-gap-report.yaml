@@ -25,11 +25,19 @@ steps:
     inputs: [user_prompt]
     tools: [Bash, Read, Grep, Glob]
     output: changes.md
+  # Reviewer-role steps GATE the run: the runtime treats "no APPROVED line"
+  # as a step failure. Reporting coverage gaps is this step's job, not a
+  # failure, so it hands off forward rather than parking the run and leaving
+  # `format` unreachable.
   - id: analyze
     participant: analyst
     role: reviewer
     inputs: [user_prompt, changes.md]
     tools: [Bash, Read, Grep, Glob]
+    on_fail:
+      action: goto
+      target: format
+      max_retries: 1
     output: gaps.md
   - id: format
     participant: writer
@@ -39,5 +47,5 @@ steps:
     permission_mode: acceptEdits
     output: report.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [testing, analysis, repo, claude]

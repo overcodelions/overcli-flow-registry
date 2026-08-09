@@ -1,5 +1,5 @@
 name: "Debug Error Logs"
-description: "Diagnose error logs, locate the failing code, draft a fix, then verify the fix with an independent reviewer"
+description: "Diagnose error logs, locate the failing code, draft a fix, verify it with an independent reviewer, then write up the result"
 input: user_prompt
 default_prompt: |-
   Diagnose this error and propose a fix:
@@ -45,12 +45,27 @@ steps:
     inputs: [user_prompt, diagnosis.md, locations.md]
     tools: [Read, Glob, Grep, Write, Edit, Bash]
     output: patch.md
+  # A reviewer-role step GATES the run: the runtime treats "no APPROVED"
+  # line as a step failure, and what a verifier emits is a verdict, not a
+  # report. So the verifier produces verification.md and hands off — fix
+  # confirmed or not — to the step that writes the actual report.
   - id: verify
     participant: verifier
     role: reviewer
     inputs: [user_prompt, diagnosis.md, patch.md]
     tools: [Read, Grep, Glob, Bash]
+    on_fail:
+      action: goto
+      target: report
+      max_retries: 1
+    output: verification.md
+  - id: report
+    participant: scout
+    role: technical-writer
+    inputs: [user_prompt, diagnosis.md, patch.md, verification.md]
+    tools: [Read, Write]
+    permission_mode: acceptEdits
     output: report.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [debugging, logs, repo, claude, codex]

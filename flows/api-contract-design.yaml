@@ -1,5 +1,5 @@
 name: "API contract design"
-description: "Research existing endpoints, design the new contract, draft schemas, then adversarially review"
+description: "Research existing endpoints, design the new contract, draft schemas, adversarially critique them, then fold the critique into a final contract"
 input: user_prompt
 default_prompt: |-
   Design the API contract for:
@@ -46,12 +46,26 @@ steps:
     tools: [Read, Glob, Write, Edit]
     permission_mode: acceptEdits
     output: schema.md
+  # A reviewer-role step GATES the run: the runtime treats "no APPROVED"
+  # line as a step failure, and an adversarial critic is built never to say
+  # it. So the critic produces critique.md and hands off — approved or not —
+  # to a finalize pass that produces the actual deliverable.
   - id: review
     participant: reviewer
     role: adversarial-reviewer
     inputs: [user_prompt, design.md, schema.md]
     tools: [Read, Grep, Glob]
+    on_fail:
+      action: goto
+      target: finalize
+      max_retries: 1
+    output: critique.md
+  - id: finalize
+    participant: writer
+    role: editor
+    inputs: [user_prompt, design.md, schema.md, critique.md]
+    tools: [Read, Grep, Glob]
     output: contract.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [design, api, docs, backend, claude, codex]

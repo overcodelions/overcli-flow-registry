@@ -3,11 +3,11 @@
     {
       "id": "adr-from-decision",
       "name": "Architecture Decision Record",
-      "description": "Research existing ADRs + context, design alternatives, draft the ADR, then review for completeness",
-      "version": "1.1.0",
+      "description": "Research existing ADRs + context, design alternatives, draft the ADR, critique it, then fold the critique into a final ADR",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["design", "docs", "claude", "codex"],
-      "sha256": "4dc20aa21d5bf0fdde9f9749bb18b18698e9eb6b5ed155806f01c6b446768037",
+      "sha256": "1a236c41e9b9f36559ea5ea488faf8cab85f7d2251698be856731d9c4207cf5a",
       "yaml_url": "flows/adr-from-decision.yaml"
     },
     {
@@ -23,11 +23,11 @@
     {
       "id": "api-contract-design",
       "name": "API contract design",
-      "description": "Research existing endpoints, design the new contract, draft schemas, then adversarially review",
-      "version": "1.1.0",
+      "description": "Research existing endpoints, design the new contract, draft schemas, adversarially critique them, then fold the critique into a final contract",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["design", "api", "docs", "backend", "claude", "codex"],
-      "sha256": "50fb965f74c5b7c7c7ec9f4410c3d2ea8b3176dc9f216fcb4949eef1d5fdeddb",
+      "sha256": "98f45036a9f4a97c4c1128432544184f4c23f544e28adf4d568f369f8ecf929f",
       "yaml_url": "flows/api-contract-design.yaml"
     },
     {
@@ -64,10 +64,10 @@
       "id": "code-review",
       "name": "Code Review",
       "description": "Survey the diff, review for correctness and security with independent reviewers, adversarially verify the findings, then format a final report",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["review", "prs", "repo", "claude"],
-      "sha256": "86a86ea3e07fc5544e281dafbbb0752182a28149308e9f6e49587f449869eb9c",
+      "sha256": "6e03d180aa60ed8992ba3ac1a9dbfeaa690064ab5043e61d7475eeb2e1789d5b",
       "yaml_url": "flows/code-review.yaml"
     },
     {
@@ -84,10 +84,10 @@
       "id": "coverage-gap-report",
       "name": "Coverage gap report",
       "description": "Diff recent changes, analyze test coverage, then format a gap report ranked by risk",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["testing", "analysis", "repo", "claude"],
-      "sha256": "89e8dc98cac3374318c05b4eab48b47e90d8a5acb5f44fbe74bcb6c8ce96b7db",
+      "sha256": "ebe0f60d6b771be503d2c1a88c3f9f2b228b7e4900e09010edfa32348808b4c7",
       "yaml_url": "flows/coverage-gap-report.yaml"
     },
     {
@@ -103,31 +103,31 @@
     {
       "id": "data-model-design",
       "name": "Data model design",
-      "description": "Research existing schema, design new tables/indexes/constraints, draft DDL, then review for safety",
-      "version": "1.1.0",
+      "description": "Research existing schema, design new tables/indexes/constraints, draft DDL, critique it for safety, then fold the critique into a final model",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["design", "data", "repo", "backend", "claude", "codex"],
-      "sha256": "ffc592bba6cbcc5d60e8c609207e3e7651c58ca225132de05d782e4777c27461",
+      "sha256": "4365116a96530f3559df166647f22e4baf36ba7e2f4f12ff70c4dca664def921",
       "yaml_url": "flows/data-model-design.yaml"
     },
     {
       "id": "dead-code-finder",
       "name": "Dead-code finder",
       "description": "Scan for unreferenced symbols, verify each candidate is truly dead, then format a deletion plan",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["refactor", "repo", "analysis", "claude"],
-      "sha256": "db9a118ff946ce5a2ec9fe725def90a561f8daae973af8350b37aefd4f5c5121",
+      "sha256": "b4d9ba93a365addd3483136cb3fcde315b1ebfb873cb1ca0caa9f4c4debe4984",
       "yaml_url": "flows/dead-code-finder.yaml"
     },
     {
       "id": "debug-logs",
       "name": "Debug Error Logs",
-      "description": "Diagnose error logs, locate the failing code, draft a fix, then verify the fix with an independent reviewer",
-      "version": "1.1.0",
+      "description": "Diagnose error logs, locate the failing code, draft a fix, verify it with an independent reviewer, then write up the result",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["debugging", "logs", "repo", "claude", "codex"],
-      "sha256": "3498421e0882e81e83c4025618275b497f165f9c2e2a628364bca9c821e8b7bb",
+      "sha256": "eca611288a9ef9be48e4fd37954316fd1042eddc0a57e95a702e02aeba3c054a",
       "yaml_url": "flows/debug-logs.yaml"
     },
     {
@@ -144,10 +144,10 @@
       "id": "dockerfile-review",
       "name": "Dockerfile review",
       "description": "Read the Dockerfile and context, review for size/security/cache issues, then draft concrete fixes",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["review", "infra", "devops", "claude", "codex"],
-      "sha256": "f794f7161a6b29f638272359a460c7c3fac296a13e9755e4113a23b1138ec5e6",
+      "sha256": "1277275e4a837ca1a90384f4744a961004c76a7cf8d1b66d1212f73bb6c5f9fd",
       "yaml_url": "flows/dockerfile-review.yaml"
     },
     {
@@ -183,51 +183,51 @@
     {
       "id": "incident-postmortem",
       "name": "Incident postmortem from notes",
-      "description": "Gather the incident record, build a timeline and root-cause analysis, draft the postmortem, then review for blamelessness and completeness",
-      "version": "1.1.0",
+      "description": "Gather the incident record, build a timeline and root-cause analysis, draft the postmortem, critique it for blamelessness and completeness, then finalize",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["operations", "docs", "infra", "claude", "codex"],
-      "sha256": "4d50ce4e19560d1a166ddf77584953e7b77c457ca1c511a85db395173510cdc0",
+      "sha256": "49bcc51ebfd5bf5b07db84784a75494f2f0c7759605ba4449126631e8672607d",
       "yaml_url": "flows/incident-postmortem.yaml"
     },
     {
       "id": "jira-to-pr",
       "name": "Jira ticket to PR",
-      "description": "Fetch the ticket, design a plan, implement with a critic loop, review with auto-bounce, then open a PR on approval",
-      "version": "1.1.0",
+      "description": "Fetch the ticket, design a plan, implement with a critic loop, review, apply a single fix pass, then open a PR on approval",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["tickets", "implementation", "mcp-jira", "claude", "codex"],
-      "sha256": "fa576053284e56d84cd5eac73f82d232bb8bfacaa6e26fc2101497032ea11163",
+      "sha256": "5fa0cf115428d525d812d370580530bd0d47b4c67f079e03f1d7faac7f93eb28",
       "yaml_url": "flows/jira-to-pr.yaml"
     },
     {
       "id": "license-audit",
       "name": "License audit",
       "description": "Inventory dep licenses + repo LICENSE files, analyze for conflicts, then format an audit report",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["operations", "security", "repo", "devops", "claude"],
-      "sha256": "0fbe713cf8d6d11abf34dbfe171f06496fd4e2d35b7c31b069858d9ba4bd2822",
+      "sha256": "305c9d9305787792c63f63e198945b037aab8d3f1f18c0f11788b3428ef7e355",
       "yaml_url": "flows/license-audit.yaml"
     },
     {
       "id": "migration-plan",
       "name": "Data migration plan",
-      "description": "Survey current schema + scale, design an online migration with rollback, draft scripts, then review for safety",
-      "version": "1.1.0",
+      "description": "Survey current schema + scale, design an online migration with rollback, draft scripts, critique them for safety, then fold the critique into a final plan",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["migration", "planning", "data", "repo", "claude", "codex"],
-      "sha256": "e12619a03593754ac7e7cac9c39acc41d837ddea861dc95fa68ecb5efda34a57",
+      "sha256": "9685652fb989c81ec2802cfd4d7d11c52a15cd20335e5c174a2cef2b6059f70d",
       "yaml_url": "flows/migration-plan.yaml"
     },
     {
       "id": "on-call-runbook",
       "name": "On-call runbook",
-      "description": "Read the incident write-up, extract canonical steps, draft a runbook, then review for completeness",
-      "version": "1.1.0",
+      "description": "Read the incident write-up, extract canonical steps, draft a runbook, critique it for completeness, then fold the critique into a final runbook",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["operations", "docs", "infra", "claude", "codex"],
-      "sha256": "79ccb9898e947d0c2a8f454dac4ed55acdfc19a225020064061aff1088936aff",
+      "sha256": "b42b77d8e1e4aed526fb97da1e82a3e547316f186bfede1a0e719115c463e877",
       "yaml_url": "flows/on-call-runbook.yaml"
     },
     {
@@ -284,20 +284,20 @@
       "id": "security-review",
       "name": "Security review",
       "description": "Map the diff, scan for OWASP-style issues, adversarially verify each finding with a fresh reviewer, then format a report",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["security", "review", "repo", "claude"],
-      "sha256": "7d4116b241414b1c9b97e9988b953467fc737977af4b6ac6b1de751541ba7233",
+      "sha256": "ea73c8af098b464c742162e4368c820685fcedeab82bb0578c3bccc14014d960",
       "yaml_url": "flows/security-review.yaml"
     },
     {
       "id": "solve-ticket",
       "name": "Solve a ticket end-to-end",
-      "description": "Fetch a Jira ticket, design a plan, implement with a critic loop, review with auto-bounce on failure, write tests, then open a PR on approval",
-      "version": "1.1.0",
+      "description": "Fetch a Jira ticket, design a plan, implement with a critic loop, review, apply a single fix pass, write tests, then open a PR on approval",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["tickets", "implementation", "mcp-jira", "claude", "codex"],
-      "sha256": "92d89274ba49fe683a55eaab364f2d225b6957e0cbb3f808035e136dccd57b4a",
+      "sha256": "d98a13941202331d9372bbaaaf0997e8e35a3db1beda543259c14b702930e903",
       "yaml_url": "flows/solve-ticket.yaml"
     },
     {
@@ -333,21 +333,21 @@
     {
       "id": "system-design-doc",
       "name": "System design doc",
-      "description": "Research the area, design alternatives, draft a full design doc, then adversarially review",
-      "version": "1.1.0",
+      "description": "Research the area, design alternatives, draft a full design doc, adversarially critique it, then fold the critique into a final doc",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["design", "docs", "claude", "codex"],
-      "sha256": "34dcf77086efc8d10e59092398bdc335925a28502a19d58e8ad7a5a8264ce005",
+      "sha256": "0201e3c90ca6842c3da084d02b76587ecb13ba3ece2f5d1d38ac57dc2602262a",
       "yaml_url": "flows/system-design-doc.yaml"
     },
     {
       "id": "terraform-plan-review",
       "name": "Terraform plan review",
       "description": "Parse the plan, assess blast radius and rollback, then format a risk-ranked report",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
       "tags": ["review", "infra", "devops", "claude"],
-      "sha256": "e734bda37562c87f8a7702b8122dad9a9d723672570b9dfdf56b517ac505c2ca",
+      "sha256": "a1d7a029857d1cbd5e017b20118c2ca991db0becfdcb9a3b0aa4868ad24dc1b3",
       "yaml_url": "flows/terraform-plan-review.yaml"
     },
     {

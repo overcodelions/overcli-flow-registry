@@ -25,11 +25,19 @@ steps:
     inputs: [user_prompt]
     tools: [Bash, Read, Glob]
     output: inventory.md
+  # Reviewer-role steps GATE the run: the runtime treats "no APPROVED line"
+  # as a step failure. Reporting a license conflict is this step's job, not a
+  # failure, so it hands off forward rather than parking the run and leaving
+  # `format` unreachable.
   - id: analyze
     participant: analyst
     role: reviewer
     inputs: [user_prompt, inventory.md]
     tools: [Read, WebFetch]
+    on_fail:
+      action: goto
+      target: format
+      max_retries: 1
     output: analysis.md
   - id: format
     participant: writer
@@ -39,5 +47,5 @@ steps:
     permission_mode: acceptEdits
     output: audit.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [operations, security, repo, devops, claude]
