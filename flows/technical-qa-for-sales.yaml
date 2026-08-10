@@ -1,0 +1,131 @@
+name: "Technical Q&A for Sales"
+description: "Answer a prospect's technical question from real evidence, adversarially fact-check every claim, then deliver both a send-ready customer response and the internal technical backing"
+input: user_prompt
+default_prompt: |-
+  Answer this technical question from a prospect:
+
+  <paste the question, RFP item, or security-questionnaire row here>
+
+  Account / context (optional): <who is asking, and what they are evaluating>
+participants:
+  - id: scout
+    name: Scout
+    backend: claude
+    model: claude-sonnet-5
+    kind: primary
+  - id: engineer
+    name: Solutions engineer
+    backend: claude
+    model: claude-opus-5
+    kind: custom
+  - id: verifier
+    name: Fact-checker
+    backend: claude
+    model: claude-opus-5
+    kind: reviewer
+  - id: writer
+    name: Writer
+    backend: claude
+    model: claude-sonnet-5
+    kind: worker
+steps:
+  # Facts only. The researcher role is deliberately forbidden from proposing
+  # or concluding anything — the answer gets built in the next step, from
+  # what this one can actually cite.
+  - id: research
+    participant: scout
+    role: researcher
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob, Bash, WebFetch, mcp:atlassian]
+    output: evidence.md
+  - id: analyze
+    participant: engineer
+    role: custom
+    system_prompt: |-
+      You are the ANALYST step of a multi-stage automated flow. A prospect
+      has asked one or more technical questions about this product, and a
+      researcher has gathered evidence from the codebase and docs. Sales
+      will send an answer based on yours, so a confident wrong answer here
+      becomes a commitment the company cannot keep.
+
+      Answer each question separately. For every one, give:
+        - VERDICT, exactly one of: Supported / Supported with configuration /
+          Partially supported / Not supported / Roadmap — not yet shipped /
+          Unknown — insufficient evidence.
+        - EVIDENCE: file:line citations, doc links, or config/API names that
+          establish the verdict. Read the code yourself to confirm what the
+          researcher reported — do not take the brief on trust.
+        - HOW IT WORKS: the mechanism, in two or three sentences. Name the
+          real setting, endpoint, or flag the customer would use.
+        - LIMITS: the version, tier, scale, platform, or configuration the
+          answer depends on, and where the behaviour stops.
+
+      Rules that matter more than completeness:
+        - "Unknown — insufficient evidence" is a correct and useful answer.
+          Never infer a capability from an adjacent one, from a variable
+          name, from a doc's aspirational phrasing, or from what a product
+          like this usually does.
+        - Distinguish what SHIPS today from what is planned, in progress, or
+          behind a flag. If it is not on a released path, it is not supported.
+        - Answer the question that was asked. If the prospect's phrasing is
+          ambiguous, answer the reading you can evidence and state the other
+          reading as an open question for the account team.
+
+      Finish with a DO NOT PROMISE list: the specific claims a salesperson
+      might reasonably infer from your answer that the evidence does NOT
+      support.
+    inputs: [user_prompt, evidence.md]
+    tools: [Read, Grep, Glob, Bash]
+    output: technical.md
+  # The whole point of this flow is that nothing reaches a customer
+  # unchallenged, so the fact-checker is a fresh participant with an
+  # adversarial brief. Its objections are the expected output, not a
+  # failure, so it hands off forward to `compose` either way.
+  - id: verify
+    participant: verifier
+    role: adversarial-reviewer
+    inputs: [user_prompt, evidence.md, technical.md]
+    tools: [Read, Grep, Glob, Bash]
+    on_fail:
+      action: goto
+      target: compose
+      max_retries: 1
+    output: verification.md
+  - id: compose
+    participant: writer
+    role: custom
+    system_prompt: |-
+      You are the FINAL step of a multi-stage automated flow. You have the
+      analyst's technical answer and a fact-checker's challenges to it. Write
+      ONE document with two parts, in this order and under these headings.
+
+      ## Customer-ready response
+
+      Prose the account team can send with light editing. Lead with the
+      direct answer to what was asked, then the mechanism in plain language,
+      then any prerequisite the customer must meet. Business register: no
+      file paths, no line numbers, no internal component names, no hedging
+      filler. Confident where the evidence is solid; plainly honest where it
+      is not — "not today, and here is what we do instead" is a legitimate
+      answer and lands better than a vague one.
+
+      ## Internal technical backing
+
+      For the account team's eyes only. Per question: the verdict, the
+      supporting citations, the limits and version/tier dependencies, and any
+      objection the fact-checker raised. End with the DO NOT PROMISE list,
+      verbatim from the analyst plus anything the fact-checker added.
+
+      The rule that governs both parts: the customer-facing text may never be
+      more certain than the technical backing. Where the analyst hedged or
+      the fact-checker landed an objection, the customer text must carry that
+      qualification too — do not resolve an "Unknown" into a "Yes", and do not
+      quietly drop a question you could not answer. Add nothing that is not
+      in your inputs.
+    inputs: [user_prompt, evidence.md, technical.md, verification.md]
+    tools: [Read, Write]
+    permission_mode: acceptEdits
+    output: answer.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [research, communication, docs, repo, claude, mcp-confluence]
