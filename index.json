@@ -341,6 +341,16 @@
       "yaml_url": "flows/system-design-doc.yaml"
     },
     {
+      "id": "technical-qa-for-sales",
+      "name": "Technical Q&A for Sales",
+      "description": "Answer a prospect's technical question from real evidence, adversarially fact-check every claim, then deliver both a send-ready customer response and the internal technical backing",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["research", "communication", "docs", "repo", "claude", "mcp-confluence"],
+      "sha256": "bf05952852fd35d91a113869cb0d0135e6d07773138fd67deef5b2e1632aa406",
+      "yaml_url": "flows/technical-qa-for-sales.yaml"
+    },
+    {
       "id": "terraform-plan-review",
       "name": "Terraform plan review",
       "description": "Parse the plan, assess blast radius and rollback, then format a risk-ranked report",
