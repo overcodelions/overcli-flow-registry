@@ -1,6 +1,53 @@
 # overcli Flow Registry
 
-This directory is the source of truth for [github.com/overcodelions/overcli-flow-registry](https://github.com/overcodelions/overcli-flow-registry). Push updates to that repo's `main` branch after testing locally.
+The public library of ready-made [overcli](https://github.com/overcodelions/overcli) flows. Every overcli install lists it under **Settings → Flows**, and any flow here installs in one click from the flow picker.
+
+Changes land through a pull request to `main`; test a flow locally before opening one.
+
+## What's in it
+
+38 flows. `index.json` is the canonical list; this table is a snapshot of it.
+
+| Flow | What it does |
+|---|---|
+| **Analyze stack trace** | Parse the trace, locate frames in the codebase, diagnose root cause, then propose a fix |
+| **API contract design** | Research existing endpoints, design the new contract, draft schemas, adversarially critique them, then fold the critique into a final contract |
+| **Architecture Decision Record** | Research existing ADRs + context, design alternatives, draft the ADR, critique it, then fold the critique into a final ADR |
+| **Changelog from commits** | Pull recent commits, group by conventional type, then emit polished CHANGELOG entries |
+| **Close stale issues** | List issues, filter for staleness, draft close comments, then post on approval |
+| **Code Review** | Survey the diff, review for correctness and security with independent reviewers, adversarially verify the findings, then format a final report |
+| **Coverage gap report** | Diff recent changes, analyze test coverage, then format a gap report ranked by risk |
+| **Data migration plan** | Survey current schema + scale, design an online migration with rollback, draft scripts, critique them for safety, then fold the critique into a final plan |
+| **Data model design** | Research existing schema, design new tables/indexes/constraints, draft DDL, critique it for safety, then fold the critique into a final model |
+| **Dead-code finder** | Scan for unreferenced symbols, verify each candidate is truly dead, then format a deletion plan |
+| **Debug CI failure** | Gather CI logs + config, diagnose root cause, then propose a concrete fix |
+| **Debug Error Logs** | Diagnose error logs, locate the failing code, draft a fix, verify it with an independent reviewer, then write up the result |
+| **Dependency upgrade audit** | Scan installed deps, cross-check vulnerability feeds, analyze breakage risk, then format an upgrade plan |
+| **Dockerfile review** | Read the Dockerfile and context, review for size/security/cache issues, then draft concrete fixes |
+| **Estimate Jira ticket** | Fetch the ticket, scope it against the repo, weigh risks, then deliver story points with rationale |
+| **Flaky test hunter** | Gather CI logs, identify flaky tests, diagnose causes, then draft fixes |
+| **Generate Documentation** | Survey code, design a doc outline, draft each section, then polish for accuracy and prose |
+| **Incident postmortem from notes** | Gather the incident record, build a timeline and root-cause analysis, draft the postmortem, critique it for blamelessness and completeness, then finalize |
+| **Jira ticket to PR** | Fetch the ticket, design a plan, implement with a critic loop, review, apply a single fix pass, then open a PR on approval |
+| **License audit** | Inventory dep licenses + repo LICENSE files, analyze for conflicts, then format an audit report |
+| **On-call runbook** | Read the incident write-up, extract canonical steps, draft a runbook, critique it for completeness, then fold the critique into a final runbook |
+| **Onboarding doc** | Survey the repo, outline an onboarding guide, draft each section, then polish |
+| **Product idea → Jira tickets** | Turn a freeform product idea or feature brief into a Jira epic with implementation tickets, created on approval |
+| **Productboard feature → Jira tickets** | Read a Productboard feature URL or description, break it into an epic + stories, then create them on approval |
+| **Publish status to Confluence** | Pull recent Jira activity, summarize progress + blockers, draft a Confluence page with narrative flow, then publish on approval |
+| **Release notes from PRs** | Gather merged PRs since last tag, categorize, then write user-facing release notes |
+| **Search company knowledge** | Fan out searches across Confluence + Jira, deep-read top hits, then synthesize a cited answer |
+| **Security review** | Map the diff, scan for OWASP-style issues, adversarially verify each finding with a fresh reviewer, then format a report |
+| **Solve a ticket end-to-end** | Fetch a Jira ticket, design a plan, implement with a critic loop, review, apply a single fix pass, write tests, then open a PR on approval |
+| **Spec → Jira tickets** | Fetch a Confluence spec, break it into an epic + stories, draft tickets, then create them on approval |
+| **Sprint retrospective** | Pull sprint tickets, analyze wins/blockers/themes, then draft a retro doc |
+| **Support ticket → Jira bug** | Convert a support ticket (Zendesk/email blob) into a well-structured Jira bug after checking for duplicates, then file it on approval |
+| **System design doc** | Research the area, design alternatives, draft a full design doc, adversarially critique it, then fold the critique into a final doc |
+| **Technical Q&A for Sales** | Answer a prospect's technical question from real evidence, adversarially fact-check every claim, then deliver both a send-ready customer response and the internal technical backing |
+| **Terraform plan review** | Parse the plan, assess blast radius and rollback, then format a risk-ranked report |
+| **Triage customer feedback** | Read customer feedback (email/transcript/blob), search Jira for duplicates, draft a ticket, then file it on approval |
+| **Triage GitHub issue** | Fetch the issue, explore the repo, diagnose, then propose a resolution + labels |
+| **Weekly status report** | Pull 7d of Jira activity, summarize themes, then format a status report |
 
 ## Adding a flow
 
@@ -11,8 +58,9 @@ This directory is the source of truth for [github.com/overcodelions/overcli-flow
      researcher | shipper | technical-writer | editor | debugger | code-reader |
      code-reviewer | security-reviewer | adversarial-reviewer | custom`
      (`custom` requires a `system_prompt`)
-   - Valid model backend: `claude | codex | gemini | copilot | ollama`. Models must
-     appear in `PREMIUM_MODELS` in `overcli/src/shared/modelCatalog.ts`
+   - Valid model backend: `claude | codex | gemini | copilot | ollama`. Cloud models must
+     appear in `PREMIUM_MODELS` in `overcli/src/shared/modelCatalog.ts` (retired ones are
+     lifted to the next model in the same family on load); `ollama` steps take any local model
    - Include `author` and `version` (e.g., `1.0.0`) — bump `version` on every change,
      since the registry installs on the `(id, version)` pair
 
@@ -28,7 +76,7 @@ This directory is the source of truth for [github.com/overcodelions/overcli-flow
 
 4. Create a pull request and merge to `main`.
 
-> **Note:** `index.json` is auto-generated — do not edit it by hand. The build script ensures sha256 hashes match files on disk (`overcli/src/main/flows/registry.ts:101-104` validates this during install). Branch protection requires PR review before merge.
+> **Note:** `index.json` is auto-generated — do not edit it by hand. The build script ensures sha256 hashes match files on disk (`loadEntryBody` in `overcli/src/main/flows/registry.ts` refuses to install a flow whose hash doesn't match). Branch protection requires PR review before merge.
 
 ## Flow conventions
 
@@ -75,10 +123,20 @@ but every flow in this registry follows them.
   on every model bump. Set `kind` on each: at most one `primary`, one `worker`, and
   one `reviewer`; everything else is `custom`.
 
-## Hosting on a private repo
+## Hosting your own registry
+
+### A local folder
+
+The simplest private registry is a folder of `*.yaml` flows you already keep in git and
+pull yourself. In **Settings → Flows → Add registry** pick **Local folder** and point it at
+the folder. No `index.json` and no `sha256` are needed: overcli reads the folder, takes
+`name`/`description`/`version`/`author`/`tags` off each YAML, and hashes each file itself
+so an edit between listing and install is caught. It never runs git or fetches anything.
+
+### A private remote
 
 Any HTTPS endpoint that serves `index.json` and the referenced `flows/*.yaml`
-files works. Add the registry in Settings → Flows → Add registry and put the
+files works. Add it in **Settings → Flows → Add registry → Remote URL** and put the
 provider's bearer/basic token in **Auth header** — the value is sent verbatim
 as the `Authorization` header.
 
