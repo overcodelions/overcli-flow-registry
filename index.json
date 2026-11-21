@@ -31,6 +31,26 @@
       "yaml_url": "flows/api-contract-design.yaml"
     },
     {
+      "id": "app-store-release-prep",
+      "name": "App Store release prep",
+      "description": "Get an iOS app ready for TestFlight or App Store review: bump the version, fix and re-audit local release blockers in a loop, then write the release notes and a checklist of what only a person can do",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["release", "documentation", "mobile", "repo", "claude"],
+      "sha256": "d25bad892b1db40c59550582560b9c5b468ac307408b43194975e18a54596574",
+      "yaml_url": "flows/app-store-release-prep.yaml"
+    },
+    {
+      "id": "bug-test-first",
+      "name": "Fix a bug test-first",
+      "description": "Reproduce a bug as a failing test, confirm it fails for the right reason, then fix and verify in a loop until that test and the full suite pass, and write up the cause",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["debugging", "testing", "implementation", "repo", "claude", "codex"],
+      "sha256": "10fa82b2fdc371959938138275ac7066e70efbd5740aefbe11796a66e5336aa0",
+      "yaml_url": "flows/bug-test-first.yaml"
+    },
+    {
       "id": "changelog-from-commits",
       "name": "Changelog from commits",
       "description": "Pull recent commits, group by conventional type, then emit polished CHANGELOG entries",
@@ -309,6 +329,16 @@
       "tags": ["tickets", "implementation", "mcp-jira", "claude", "codex"],
       "sha256": "ea5fea4c819e6f2909f0821da2d2ba1aa79151520b581ff44ee7a4b34cee3ad3",
       "yaml_url": "flows/solve-ticket.yaml"
+    },
+    {
+      "id": "spec-to-code",
+      "name": "Build a feature from a spec",
+      "description": "Build a spec unattended, a batch at a time: plan, build, then fix and verify in a loop until the build and tests pass, extend the tests, log progress, and go round again until the spec is done",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["implementation", "testing", "planning", "repo", "claude", "codex"],
+      "sha256": "ea7351c1c4dfccdd23bac7418cb0b4750166673f39bc3e0c322b8863dd00af62",
+      "yaml_url": "flows/spec-to-code.yaml"
     },
     {
       "id": "spec-to-tickets",

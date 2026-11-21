@@ -6,13 +6,15 @@ Changes land through a pull request to `main`; test a flow locally before openin
 
 ## What's in it
 
-39 flows. `index.json` is the canonical list; this table is a snapshot of it.
+42 flows. `index.json` is the canonical list; this table is a snapshot of it.
 
 | Flow | What it does |
 |---|---|
 | **Analyze stack trace** | Parse the trace, locate frames in the codebase, diagnose root cause, then propose a fix |
 | **API contract design** | Research existing endpoints, design the new contract, draft schemas, adversarially critique them, then fold the critique into a final contract |
+| **App Store release prep** | Get an iOS app ready for TestFlight or App Store review: bump the version, fix and re-audit local release blockers in a loop, then write the release notes and a checklist of what only a person can do |
 | **Architecture Decision Record** | Research existing ADRs + context, design alternatives, draft the ADR, critique it, then fold the critique into a final ADR |
+| **Build a feature from a spec** | Build a spec unattended, a batch at a time: plan, build, then fix and verify in a loop until the build and tests pass, extend the tests, log progress, and go round again until the spec is done |
 | **Build a game from a spec** | Build a game from its spec unattended, a batch of milestones at a time: plan, build, then fix and verify in a loop until batch-mode compiles and the game's own tests pass, extend the tests, polish without changing behaviour, log it, and go round again until every milestone is done |
 | **Changelog from commits** | Pull recent commits, group by conventional type, then emit polished CHANGELOG entries |
 | **Close stale issues** | List issues, filter for staleness, draft close comments, then post on approval |
@@ -26,6 +28,7 @@ Changes land through a pull request to `main`; test a flow locally before openin
 | **Dependency upgrade audit** | Scan installed deps, cross-check vulnerability feeds, analyze breakage risk, then format an upgrade plan |
 | **Dockerfile review** | Read the Dockerfile and context, review for size/security/cache issues, then draft concrete fixes |
 | **Estimate Jira ticket** | Fetch the ticket, scope it against the repo, weigh risks, then deliver story points with rationale |
+| **Fix a bug test-first** | Reproduce a bug as a failing test, confirm it fails for the right reason, then fix and verify in a loop until that test and the full suite pass, and write up the cause |
 | **Flaky test hunter** | Gather CI logs, identify flaky tests, diagnose causes, then draft fixes |
 | **Generate Documentation** | Survey code, design a doc outline, draft each section, then polish for accuracy and prose |
 | **Incident postmortem from notes** | Gather the incident record, build a timeline and root-cause analysis, draft the postmortem, critique it for blamelessness and completeness, then finalize |

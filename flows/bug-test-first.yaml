@@ -1,0 +1,114 @@
+name: "Fix a bug test-first"
+description: "Reproduce a bug as a failing test, confirm it fails for the right reason, then fix and verify in a loop until that test and the full suite pass, and write up the cause"
+input: user_prompt
+default_prompt: |-
+  Fix this bug test-first:
+
+  <paste the bug report, issue link, stack trace or steps to reproduce>
+participants:
+  - id: detective
+    name: Detective
+    backend: claude
+    model: claude-opus-5-5
+    kind: primary
+  - id: builder
+    name: Builder
+    backend: codex
+    model: gpt-6.1-terra
+    kind: worker
+  - id: writer
+    name: Writer
+    backend: claude
+    model: claude-sonnet-5-5
+    kind: custom
+steps:
+  - id: reproduce
+    participant: detective
+    role: debugger
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob, Bash]
+    effect: local
+    output: diagnosis.md
+  - id: red
+    participant: builder
+    role: custom
+    system_prompt: |-
+      You are the RED step. Write the smallest automated test that reproduces
+      the bug in the diagnosis, in the project's own test framework and
+      style, next to the code it covers. Do not change production code.
+
+      Run the test and confirm it FAILS, and that it fails because of the bug
+      (the wrong value, the exception, the missing call) — not because of a
+      typo, a missing import or broken setup. If you were sent back by the
+      CHECK step, fix exactly what it named. Quote the failing output.
+    inputs: [user_prompt, diagnosis.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: red_test.md
+  - id: check-red
+    participant: detective
+    role: custom
+    verdict_gate: true
+    system_prompt: |-
+      You are the CHECK step. Run the new test yourself. It must fail, and
+      fail for the reason the diagnosis gives; a test that passes, errors in
+      setup, or tests something else is no use. The test must not change
+      production code.
+
+      End with a line that is exactly APPROVED if the test is a faithful
+      reproduction, otherwise CHANGES REQUESTED with what is wrong — that
+      sends it back to RED.
+    inputs: [user_prompt, diagnosis.md, red_test.md]
+    tools: [Read, Grep, Glob, Bash]
+    effect: local
+    on_fail:
+      action: goto
+      target: red
+      max_retries: 2
+    output: red_check.md
+  - id: fix
+    participant: builder
+    role: custom
+    system_prompt: |-
+      You are the FIX step. Make the new failing test pass by fixing the
+      cause in production code. Do NOT edit, skip or weaken the new test.
+      Keep the change as small as the cause allows.
+
+      If the VERIFY step sent you back, fix exactly what it named. Run the
+      new test and the full suite, and quote the result lines. Summarize
+      what you changed file by file.
+    inputs: [user_prompt, diagnosis.md, red_test.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: diff
+  - id: verify
+    participant: detective
+    role: custom
+    verdict_gate: true
+    system_prompt: |-
+      You are the VERIFY step. Check by running: the new test passes, the
+      full suite passes, and the new test is unchanged since it was proven
+      red. Read the fix: it must address the cause in the diagnosis, not
+      special-case the test's inputs, and it must not break nearby callers.
+
+      Report blocking problems with evidence, then notes. End with a line
+      that is exactly APPROVED if nothing is blocking, otherwise CHANGES
+      REQUESTED — that sends the work back to FIX.
+    inputs: [user_prompt, diagnosis.md, red_test.md, diff]
+    tools: [Read, Grep, Glob, Bash]
+    effect: local
+    on_fail:
+      action: goto
+      target: fix
+      max_retries: 3
+    output: verify.md
+  - id: report
+    participant: writer
+    role: technical-writer
+    inputs: [user_prompt, diagnosis.md, red_test.md, diff, verify.md]
+    tools: [Read, Grep, Glob]
+    effect: local
+    output: report.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [debugging, testing, implementation, repo, claude, codex]

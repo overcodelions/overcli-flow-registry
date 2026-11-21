@@ -1,0 +1,143 @@
+name: "Build a feature from a spec"
+description: "Build a spec unattended, a batch at a time: plan, build, then fix and verify in a loop until the build and tests pass, extend the tests, log progress, and go round again until the spec is done"
+input: user_prompt
+default_prompt: |-
+  You are working unattended. Don't stop to ask: make sensible decisions, write them down, and keep going.
+
+  Build this spec: <path to the spec, or paste it here>
+  Scope: <which sections or milestones; "all of it" is fine>
+  Progress log: <file to keep it in, e.g. BUILD_LOG.md>
+
+  Don't commit or push. If you get stuck, leave a clearly marked stub and move on.
+participants:
+  - id: architect
+    name: Architect
+    backend: claude
+    model: claude-fable-5-2
+    kind: primary
+  - id: lead
+    name: Lead
+    backend: claude
+    model: claude-opus-5-5
+    kind: reviewer
+  - id: builder
+    name: Builder
+    backend: codex
+    model: gpt-6.1-terra
+    kind: worker
+steps:
+  - id: plan
+    participant: architect
+    role: custom
+    system_prompt: |-
+      You are the PLAN step of an unattended build that loops one batch at a
+      time until the spec is done.
+
+      Read the spec, the project's CLAUDE.md or README, and the progress log
+      if it exists, then look at the code to see what is really built. Pick
+      the next coherent batch from the scope the user gave — never one that
+      depends on unfinished work — and plan it: files to add or change, the
+      tests that prove it, and the commands that build and test it. If you
+      were sent back by the NEXT step, start from what it named.
+
+      Do not write code. Reply with the plan.
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob]
+    effect: local
+    output: plan.md
+  - id: build
+    participant: builder
+    role: implementer
+    inputs: [user_prompt, plan.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: diff
+  - id: fix
+    participant: builder
+    role: custom
+    system_prompt: |-
+      You are the FIX step. It runs right after the build, and again each
+      time the VERIFY step sends the work back.
+
+      If VERIFY sent you back, its report is in your input: fix exactly the
+      blocking problems it names, naming the finding with each change.
+      Otherwise run the project's build, type check and tests, and fix every
+      failure this batch caused. If everything passes, change NOTHING and
+      reply "No changes required."
+
+      Do not re-implement the plan or add scope. Finish by running the build
+      and tests again and quoting the result lines.
+    inputs: [user_prompt, plan.md, diff]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: diff
+  - id: verify
+    participant: lead
+    role: custom
+    verdict_gate: true
+    system_prompt: |-
+      You are the VERIFY step of an unattended build. Check the batch against
+      the plan and the spec by running it, not by reading it: build, type
+      check, lint and the full test suite, and compare what was built with
+      each planned item. A failure, a skipped test, or a planned item that is
+      missing or silently stubbed is blocking.
+
+      Report blocking problems (each with the file and the evidence), then
+      non-blocking notes. End with a line that is exactly APPROVED if nothing
+      is blocking, otherwise CHANGES REQUESTED — that sends the work back to
+      FIX.
+    inputs: [user_prompt, plan.md, diff]
+    tools: [Read, Grep, Glob, Bash]
+    effect: local
+    # Loop: back to FIX with this report, then VERIFY again. The budget is
+    # per run; when it runs out the run pauses for a person.
+    on_fail:
+      action: goto
+      target: fix
+      max_retries: 5
+    output: verify.md
+  - id: tests
+    participant: builder
+    role: test-writer
+    inputs: [user_prompt, plan.md, diff, verify.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: tests_report.md
+  - id: log
+    participant: lead
+    role: custom
+    system_prompt: |-
+      You are the LOG step. Update the progress log the user named (create it
+      if needed), keeping what earlier batches wrote: what's done per spec
+      item, what was verified (commands and result counts), known issues and
+      stubs, decisions made, and what needs a person. Never claim something
+      was run if it wasn't. Do not commit or push. Reply with the log's text.
+    inputs: [user_prompt, plan.md, diff, verify.md, tests_report.md]
+    tools: [Read, Glob, Grep, Write, Edit]
+    effect: local
+    output: build_log.md
+  - id: next
+    participant: lead
+    role: custom
+    verdict_gate: true
+    system_prompt: |-
+      You are the NEXT step: you decide whether the build goes round again.
+      Compare the scope the user asked for with the progress log and the
+      code, and list what is done and what is left. Then end with exactly one
+      of these lines:
+        - APPROVED — the scope is built and verified, or everything left
+          needs a person. Say which.
+        - CONTINUE: <the next batch> — anything else. This sends the run
+          back to PLAN.
+      Never start any other line with the word APPROVED.
+    inputs: [user_prompt, build_log.md]
+    tools: [Read, Grep, Glob]
+    effect: local
+    on_fail:
+      action: goto
+      target: plan
+      max_retries: 10
+    output: next.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [implementation, testing, planning, repo, claude, codex]
