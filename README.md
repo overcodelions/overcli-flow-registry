@@ -6,13 +6,14 @@ Changes land through a pull request to `main`; test a flow locally before openin
 
 ## What's in it
 
-38 flows. `index.json` is the canonical list; this table is a snapshot of it.
+39 flows. `index.json` is the canonical list; this table is a snapshot of it.
 
 | Flow | What it does |
 |---|---|
 | **Analyze stack trace** | Parse the trace, locate frames in the codebase, diagnose root cause, then propose a fix |
 | **API contract design** | Research existing endpoints, design the new contract, draft schemas, adversarially critique them, then fold the critique into a final contract |
 | **Architecture Decision Record** | Research existing ADRs + context, design alternatives, draft the ADR, critique it, then fold the critique into a final ADR |
+| **Build a game from a spec** | Plan the next milestones from a game spec, build them unattended, verify with batch-mode compiles and the game's own tests, apply one fix pass, extend the tests, then write an honest build log |
 | **Changelog from commits** | Pull recent commits, group by conventional type, then emit polished CHANGELOG entries |
 | **Close stale issues** | List issues, filter for staleness, draft close comments, then post on approval |
 | **Code Review** | Survey the diff, review for correctness and security with independent reviewers, adversarially verify the findings, then format a final report |

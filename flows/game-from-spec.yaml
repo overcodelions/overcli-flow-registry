@@ -1,0 +1,146 @@
+name: "Build a game from a spec"
+description: "Plan the next milestones from a game spec, build them unattended, verify with batch-mode compiles and the game's own tests, apply one fix pass, extend the tests, then write an honest build log"
+input: user_prompt
+default_prompt: |-
+  You are working unattended. I can't answer questions or approve anything until I'm back. Don't stop to ask. Make sensible decisions, write them down, and keep going until the game is as complete as you can make it.
+
+  Read CLAUDE.md and spec/SPEC.md fully. <Shared code: which sibling project to copy from, and that it must never be edited. Target look: the render or mock-ups to match.>
+
+  Build these milestones from the spec, in order. Finish and verify each one before the next:
+  <milestone numbers, or "every milestone in spec section N">
+
+  Priorities:
+  - <what must never break, e.g. deterministic physics, every level beatable by a bot>
+
+  Verify after every milestone:
+  - Compile in batch mode (the command is in CLAUDE.md), check the log for "error CS", and fix every error before moving on.
+  - Make the project's Build All menu create everything through -executeMethod and run every test, so I only need to open a scene and press Play.
+
+  Rules:
+  - Keep scripts small, one responsibility each. Keep tuning numbers in the spec's constants.
+  - Don't add packages you can't verify will resolve.
+  - Don't commit or push. If you get stuck, leave a clearly marked stub and move on.
+participants:
+  - id: architect
+    name: Architect
+    backend: claude
+    model: claude-fable-5-2
+    kind: primary
+  - id: lead
+    name: Lead
+    backend: claude
+    model: claude-opus-5-5
+    kind: reviewer
+  - id: builder
+    name: Builder
+    backend: claude
+    model: claude-sonnet-5-5
+    kind: worker
+steps:
+  - id: plan
+    participant: architect
+    role: planner
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob]
+    effect: local
+    output: plan.md
+  - id: build
+    participant: builder
+    role: implementer
+    inputs: [user_prompt, plan.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: diff
+  - id: verify
+    participant: lead
+    role: custom
+    verdict_gate: true
+    system_prompt: |-
+      You are the VERIFY step of an unattended game build. The builder has
+      implemented the planned milestones; nobody is watching, so your check
+      is the only one before a person picks up a phone.
+
+      Check the work against the plan and the spec — by running it, not by
+      reading it:
+        - Compile in the engine's batch mode (the command is in CLAUDE.md)
+          and read the log. Any compile error is blocking.
+        - Run the project's Build All / test entry point and read every
+          result line. A failing or skipped test is blocking.
+        - Where the project has one, run the bot or replay harness that
+          plays the game headless, and look at any screenshots it writes.
+        - Compare what was built with each planned milestone. A milestone
+          that is missing or only stubbed without saying so is blocking.
+
+      If the engine's editor is open on the project and batch mode can't
+      run, say so plainly and do not close it.
+
+      Report, in this order: blocking problems (each with the file and the
+      evidence), non-blocking notes, and a list of what you verified versus
+      what nobody has tried (device input, performance, multiplayer). End
+      with APPROVED if nothing is blocking, otherwise CHANGES REQUESTED.
+    inputs: [user_prompt, plan.md, diff]
+    tools: [Read, Grep, Glob, Bash]
+    effect: local
+    # A failed verify goes FORWARD to the fix pass, never back to build:
+    # re-running the builder against its original inputs gives it nothing
+    # new to work from.
+    on_fail:
+      action: goto
+      target: fix
+      max_retries: 1
+    output: verify.md
+  - id: fix
+    participant: builder
+    role: custom
+    system_prompt: |-
+      You are the FIX step of an unattended game build. The milestones are
+      already implemented and the verify step has just checked them.
+
+      Read the verify report and act on it — nothing else:
+        - Fix exactly the blocking problems it names. Name the finding you
+          are addressing with each change.
+        - If it approved the work with nothing blocking, change NOTHING.
+          Reply "No changes required." and stop.
+
+      Do not re-implement the plan. After your changes, compile in batch
+      mode and run the project's tests again, and report the result lines.
+      Summarize what you changed file by file, one line per file.
+    inputs: [user_prompt, plan.md, diff, verify.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: diff
+  - id: tests
+    participant: builder
+    role: test-writer
+    inputs: [user_prompt, plan.md, diff, verify.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: tests_report.md
+  - id: log
+    participant: lead
+    role: custom
+    system_prompt: |-
+      You are the LOG step, the last step of an unattended game build. The
+      person who asked for it was away the whole time; your log is the first
+      thing they read.
+
+      Write or update spec/BUILD_LOG.md in the project, with these sections:
+        - Start here: the menu to run and the exact result lines to look for,
+          then which scene to open and press Play.
+        - What's done, per milestone.
+        - Verified versus not tried. Be exact: what compiled, which tests
+          passed (with counts), what a bot played, and what nobody has tried
+          yet (a real device, touch and tilt, two devices, online play).
+        - How to play: the controls in the editor and on a device.
+        - Known issues and stubs.
+        - Decisions you made, and what needs the person.
+
+      Never claim something was run or seen if it wasn't. Do not commit or
+      push. Reply with the log's text.
+    inputs: [user_prompt, plan.md, diff, verify.md, tests_report.md]
+    tools: [Read, Glob, Grep, Write, Edit]
+    effect: local
+    output: build_log.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [implementation, testing, planning, repo, mobile, claude]

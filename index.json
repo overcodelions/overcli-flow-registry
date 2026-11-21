@@ -181,6 +181,16 @@
       "yaml_url": "flows/flaky-test-hunter.yaml"
     },
     {
+      "id": "game-from-spec",
+      "name": "Build a game from a spec",
+      "description": "Plan the next milestones from a game spec, build them unattended, verify with batch-mode compiles and the game's own tests, apply one fix pass, extend the tests, then write an honest build log",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["implementation", "testing", "planning", "repo", "mobile", "claude"],
+      "sha256": "083796c25880f6d648f48e538884672976c49ee2912a62c48e2d7639b6657eb4",
+      "yaml_url": "flows/game-from-spec.yaml"
+    },
+    {
       "id": "incident-postmortem",
       "name": "Incident postmortem from notes",
       "description": "Gather the incident record, build a timeline and root-cause analysis, draft the postmortem, critique it for blamelessness and completeness, then finalize",
