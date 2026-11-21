@@ -9,22 +9,22 @@ participants:
   - id: parser
     name: Parser
     backend: claude
-    model: claude-sonnet-5
+    model: claude-sonnet-5-5
     kind: primary
   - id: locator
     name: Locator
     backend: claude
-    model: claude-sonnet-5
+    model: claude-sonnet-5-5
     kind: custom
   - id: diagnostician
     name: Diagnostician
     backend: claude
-    model: claude-opus-5
+    model: claude-opus-5-5
     kind: reviewer
   - id: fixer
     name: Fixer
     backend: codex
-    model: gpt-5.6-terra
+    model: gpt-6.1-terra
     kind: worker
 steps:
   - id: parse
@@ -32,25 +32,29 @@ steps:
     role: researcher
     inputs: [user_prompt]
     tools: []
+    effect: local
     output: frames.md
   - id: locate
     participant: locator
     role: researcher
     inputs: [user_prompt, frames.md]
     tools: [Read, Grep, Glob]
+    effect: local
     output: locations.md
   - id: diagnose
     participant: diagnostician
     role: debugger
     inputs: [user_prompt, frames.md, locations.md]
     tools: [Read, Grep, Glob]
+    effect: local
     output: diagnosis.md
   - id: propose-fix
     participant: fixer
     role: implementer
     inputs: [user_prompt, diagnosis.md, locations.md]
     tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
     output: fix.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [debugging, logs, repo, claude, codex]

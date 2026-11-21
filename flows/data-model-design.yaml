@@ -9,22 +9,22 @@ participants:
   - id: scout
     name: Scout
     backend: claude
-    model: claude-sonnet-5
+    model: claude-sonnet-5-5
     kind: primary
   - id: architect
     name: Architect
     backend: claude
-    model: claude-fable-5
+    model: claude-fable-5-2
     kind: custom
   - id: writer
     name: DDL author
     backend: codex
-    model: gpt-5.6-terra
+    model: gpt-6.1-terra
     kind: worker
   - id: reviewer
     name: Reviewer
     backend: claude
-    model: claude-opus-5
+    model: claude-opus-5-5
     kind: reviewer
 steps:
   - id: research
@@ -32,12 +32,14 @@ steps:
     role: researcher
     inputs: [user_prompt]
     tools: [Read, Grep, Glob]
+    effect: local
     output: research.md
   - id: design
     participant: architect
     role: planner
     inputs: [user_prompt, research.md]
     tools: [Read, Grep, Glob]
+    effect: local
     output: design.md
   - id: ddl
     participant: writer
@@ -45,6 +47,7 @@ steps:
     inputs: [user_prompt, design.md]
     tools: [Read, Glob, Write, Edit]
     permission_mode: acceptEdits
+    effect: local
     output: ddl.md
   # A reviewer-role step GATES the run: the runtime treats "no APPROVED"
   # line as a step failure, and what a critic emits is a verdict, not a
@@ -59,13 +62,15 @@ steps:
       action: goto
       target: finalize
       max_retries: 1
+    effect: local
     output: critique.md
   - id: finalize
     participant: writer
     role: editor
     inputs: [user_prompt, design.md, ddl.md, critique.md]
     tools: [Read, Grep, Glob]
+    effect: local
     output: model.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.2.0
+version: 1.3.0
 tags: [design, data, repo, backend, claude, codex]

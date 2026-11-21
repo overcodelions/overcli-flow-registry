@@ -6,17 +6,17 @@ participants:
   - id: scout
     name: Scout
     backend: claude
-    model: claude-sonnet-5
+    model: claude-sonnet-5-5
     kind: primary
   - id: filterer
     name: Filterer
     backend: claude
-    model: claude-sonnet-5
+    model: claude-sonnet-5-5
     kind: worker
   - id: writer
     name: Writer
     backend: claude
-    model: claude-opus-5
+    model: claude-opus-5-5
     kind: reviewer
 steps:
   - id: list
@@ -24,18 +24,21 @@ steps:
     role: researcher
     inputs: [user_prompt]
     tools: [Bash]
+    effect: local
     output: issues.md
   - id: filter
     participant: filterer
     role: researcher
     inputs: [user_prompt, issues.md]
     tools: [Bash, Read, Grep]
+    effect: local
     output: stale.md
   - id: draft
     participant: writer
     role: technical-writer
     inputs: [user_prompt, stale.md]
     tools: [Read]
+    effect: local
     output: comments.md
   - id: post
     participant: scout
@@ -43,7 +46,8 @@ steps:
     inputs: [user_prompt, stale.md, comments.md]
     tools: [Bash]
     pause_before: true
+    effect: external
     output: actions.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [operations, issues, repo, claude]

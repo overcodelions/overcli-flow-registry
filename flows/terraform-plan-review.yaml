@@ -9,17 +9,17 @@ participants:
   - id: scout
     name: Scout
     backend: claude
-    model: claude-sonnet-5
+    model: claude-sonnet-5-5
     kind: primary
   - id: reviewer
     name: Reviewer
     backend: claude
-    model: claude-opus-5
+    model: claude-opus-5-5
     kind: reviewer
   - id: writer
     name: Writer
     backend: claude
-    model: claude-sonnet-5
+    model: claude-sonnet-5-5
     kind: worker
 steps:
   - id: parse
@@ -27,6 +27,7 @@ steps:
     role: researcher
     inputs: [user_prompt]
     tools: [Read, Grep, Glob]
+    effect: local
     output: parsed.md
   # Reviewer-role steps GATE the run: the runtime treats "no APPROVED line"
   # as a step failure. Flagging a risky apply is this step's job, not a
@@ -41,6 +42,7 @@ steps:
       action: goto
       target: format
       max_retries: 1
+    effect: local
     output: risk.md
   - id: format
     participant: writer
@@ -48,7 +50,8 @@ steps:
     inputs: [user_prompt, risk.md]
     tools: [Read, Write]
     permission_mode: acceptEdits
+    effect: local
     output: review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.2.0
+version: 1.3.0
 tags: [review, infra, devops, claude]
