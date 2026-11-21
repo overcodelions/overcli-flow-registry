@@ -1,0 +1,111 @@
+name: "Address PR review comments"
+description: "Read the open review comments on a pull request, plan a response to each, fix and verify in a loop until every comment is handled and the tests pass, then push and reply to each thread on approval"
+input: user_prompt
+default_prompt: |-
+  Address the open review comments on this pull request:
+
+  <PR number or URL>
+participants:
+  - id: lead
+    name: Lead
+    backend: claude
+    model: claude-opus-5-5
+    kind: primary
+  - id: builder
+    name: Builder
+    backend: codex
+    model: gpt-6.1-terra
+    kind: worker
+  - id: writer
+    name: Writer
+    backend: claude
+    model: claude-sonnet-5-5
+    kind: custom
+steps:
+  - id: fetch
+    participant: lead
+    role: researcher
+    system_prompt: |-
+      Read the pull request with the GitHub CLI: its description, its diff,
+      and every unresolved review thread and review comment (gh pr view,
+      gh api for review threads). Check out its branch if the working copy
+      isn't on it. List each open comment with its thread id, file and line,
+      who wrote it and exactly what it asks. Change nothing.
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob, Bash]
+    effect: local
+    output: comments.md
+  - id: plan
+    participant: lead
+    role: planner
+    system_prompt: |-
+      For every open comment, decide one of: CHANGE (say exactly what to
+      change), ANSWER (a question or a misunderstanding: say what to reply),
+      or PUSH BACK (the request is wrong or out of scope: give the reason,
+      politely and with evidence). Group related comments. Do not write code.
+    inputs: [user_prompt, comments.md]
+    tools: [Read, Grep, Glob]
+    effect: local
+    output: plan.md
+  - id: fix
+    participant: builder
+    role: custom
+    system_prompt: |-
+      You are the FIX step. It runs once, and again each time the VERIFY
+      step sends the work back. Make the CHANGE items in the plan — nothing
+      else, no drive-by refactors. If VERIFY sent you back, fix exactly what
+      it named. Run the project's build and tests and quote the result.
+      Do not commit, push or post anything. Summarize each change against
+      the comment it answers.
+    inputs: [user_prompt, comments.md, plan.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: diff
+  - id: verify
+    participant: lead
+    role: custom
+    verdict_gate: true
+    system_prompt: |-
+      You are the VERIFY step. For every CHANGE item, check the diff really
+      does what the comment asked; run the build and tests. A comment left
+      unaddressed, a change that misreads the comment, a failing test or new
+      scope nobody asked for is blocking.
+
+      End with a line that is exactly APPROVED if nothing is blocking,
+      otherwise CHANGES REQUESTED — that sends the work back to FIX.
+    inputs: [user_prompt, comments.md, plan.md, diff]
+    tools: [Read, Grep, Glob, Bash]
+    effect: local
+    on_fail:
+      action: goto
+      target: fix
+      max_retries: 3
+    output: verify.md
+  - id: replies
+    participant: writer
+    role: technical-writer
+    system_prompt: |-
+      Draft one reply per review thread, keyed by thread id: for CHANGE, say
+      what changed in a sentence; for ANSWER, answer the question; for PUSH
+      BACK, give the reason kindly and briefly. Plain, friendly, no
+      boilerplate thanks. Don't post anything.
+    inputs: [user_prompt, comments.md, plan.md, verify.md]
+    tools: [Read]
+    effect: local
+    output: replies.md
+  - id: post
+    participant: writer
+    role: shipper
+    system_prompt: |-
+      Commit the changes on the PR's branch with a short message per group
+      of comments, push, then post each drafted reply to its thread with the
+      GitHub CLI. Resolve a thread only when it was a CHANGE that is now done.
+      Report the commit and the links to each reply.
+    inputs: [user_prompt, replies.md, verify.md]
+    tools: [Bash]
+    effect: external
+    pause_before: true
+    output: pr_url
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [prs, review, implementation, repo, claude, codex]

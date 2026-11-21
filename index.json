@@ -41,6 +41,16 @@
       "yaml_url": "flows/app-store-release-prep.yaml"
     },
     {
+      "id": "backfill-tests",
+      "name": "Backfill tests",
+      "description": "Find the riskiest untested code, write tests that pin its current behaviour, and fix and verify the tests in a loop until they pass reliably — without changing production code — then report what they cover and any bugs found",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["testing", "implementation", "repo", "claude", "codex"],
+      "sha256": "8ca1a308999a3c633f3f0ec54a1da7920819e92b24e10c3c264da1d78068947f",
+      "yaml_url": "flows/backfill-tests.yaml"
+    },
+    {
       "id": "bug-test-first",
       "name": "Fix a bug test-first",
       "description": "Reproduce a bug as a failing test, confirm it fails for the right reason, then fix and verify in a loop until that test and the full suite pass, and write up the cause",
@@ -161,6 +171,16 @@
       "yaml_url": "flows/dependency-upgrade-audit.yaml"
     },
     {
+      "id": "dependency-upgrade",
+      "name": "Upgrade a dependency",
+      "description": "Research a dependency's breaking changes, upgrade it, then fix and verify in a loop until the build, types and tests pass with no deprecated calls left, and write up what changed",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["migration", "implementation", "testing", "repo", "claude", "codex"],
+      "sha256": "b74fc744ecd7db01997cb07891ef8c8186e4baa4f730b8f84d78b35fb23835cd",
+      "yaml_url": "flows/dependency-upgrade.yaml"
+    },
+    {
       "id": "dockerfile-review",
       "name": "Dockerfile review",
       "description": "Read the Dockerfile and context, review for size/security/cache issues, then draft concrete fixes",
@@ -269,6 +289,16 @@
       "tags": ["documentation", "docs", "repo", "claude", "codex"],
       "sha256": "0fe629de49cfb4933412e60502ce71699dfcd263245caf668052727f79feb890",
       "yaml_url": "flows/onboarding-doc.yaml"
+    },
+    {
+      "id": "pr-review-responder",
+      "name": "Address PR review comments",
+      "description": "Read the open review comments on a pull request, plan a response to each, fix and verify in a loop until every comment is handled and the tests pass, then push and reply to each thread on approval",
+      "version": "1.0.0",
+      "author": { "name": "Overcli", "url": "https://github.com/overcodelions/overcli" },
+      "tags": ["prs", "review", "implementation", "repo", "claude", "codex"],
+      "sha256": "dcd97a4d6331b56eaf593c8ff379da0f65df150987f27ed6a8bbd5cd0f70b626",
+      "yaml_url": "flows/pr-review-responder.yaml"
     },
     {
       "id": "product-to-jira",

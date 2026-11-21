@@ -6,14 +6,16 @@ Changes land through a pull request to `main`; test a flow locally before openin
 
 ## What's in it
 
-42 flows. `index.json` is the canonical list; this table is a snapshot of it.
+45 flows. `index.json` is the canonical list; this table is a snapshot of it.
 
 | Flow | What it does |
 |---|---|
+| **Address PR review comments** | Read the open review comments on a pull request, plan a response to each, fix and verify in a loop until every comment is handled and the tests pass, then push and reply to each thread on approval |
 | **Analyze stack trace** | Parse the trace, locate frames in the codebase, diagnose root cause, then propose a fix |
 | **API contract design** | Research existing endpoints, design the new contract, draft schemas, adversarially critique them, then fold the critique into a final contract |
 | **App Store release prep** | Get an iOS app ready for TestFlight or App Store review: bump the version, fix and re-audit local release blockers in a loop, then write the release notes and a checklist of what only a person can do |
 | **Architecture Decision Record** | Research existing ADRs + context, design alternatives, draft the ADR, critique it, then fold the critique into a final ADR |
+| **Backfill tests** | Find the riskiest untested code, write tests that pin its current behaviour, and fix and verify the tests in a loop until they pass reliably — without changing production code — then report what they cover and any bugs found |
 | **Build a feature from a spec** | Build a spec unattended, a batch at a time: plan, build, then fix and verify in a loop until the build and tests pass, extend the tests, log progress, and go round again until the spec is done |
 | **Build a game from a spec** | Build a game from its spec unattended, a batch of milestones at a time: plan, build, then fix and verify in a loop until batch-mode compiles and the game's own tests pass, extend the tests, polish without changing behaviour, log it, and go round again until every milestone is done |
 | **Changelog from commits** | Pull recent commits, group by conventional type, then emit polished CHANGELOG entries |
@@ -51,6 +53,7 @@ Changes land through a pull request to `main`; test a flow locally before openin
 | **Terraform plan review** | Parse the plan, assess blast radius and rollback, then format a risk-ranked report |
 | **Triage customer feedback** | Read customer feedback (email/transcript/blob), search Jira for duplicates, draft a ticket, then file it on approval |
 | **Triage GitHub issue** | Fetch the issue, explore the repo, diagnose, then propose a resolution + labels |
+| **Upgrade a dependency** | Research a dependency's breaking changes, upgrade it, then fix and verify in a loop until the build, types and tests pass with no deprecated calls left, and write up what changed |
 | **Weekly status report** | Pull 7d of Jira activity, summarize themes, then format a status report |
 
 ## Adding a flow
