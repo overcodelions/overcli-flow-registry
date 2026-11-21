@@ -6,17 +6,17 @@ participants:
   - id: scout
     name: Scout
     backend: claude
-    model: claude-sonnet-5
+    model: claude-sonnet-5-5
     kind: primary
   - id: categorizer
     name: Categorizer
     backend: claude
-    model: claude-sonnet-5
+    model: claude-sonnet-5-5
     kind: reviewer
   - id: writer
     name: Writer
     backend: codex
-    model: gpt-5.6-terra
+    model: gpt-6.1-terra
     kind: worker
 steps:
   - id: gather
@@ -24,12 +24,14 @@ steps:
     role: researcher
     inputs: [user_prompt]
     tools: [Bash]
+    effect: local
     output: commits.md
   - id: categorize
     participant: categorizer
     role: researcher
     inputs: [user_prompt, commits.md]
     tools: [Bash, Read]
+    effect: local
     output: grouped.md
   - id: format
     participant: writer
@@ -37,7 +39,8 @@ steps:
     inputs: [user_prompt, commits.md, grouped.md]
     tools: [Read, Write, Edit]
     permission_mode: acceptEdits
+    effect: local
     output: changelog.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.1.0
+version: 1.2.0
 tags: [documentation, repo, release, claude, codex]

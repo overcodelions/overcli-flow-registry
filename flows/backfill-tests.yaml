@@ -1,0 +1,108 @@
+name: "Backfill tests"
+description: "Find the riskiest untested code, write tests that pin its current behaviour, and fix and verify the tests in a loop until they pass reliably — without changing production code — then report what they cover and any bugs found"
+input: user_prompt
+default_prompt: |-
+  Backfill tests for: <a directory, module or "the riskiest untested code in the repo">
+
+  How many targets: <e.g. the top 5>
+participants:
+  - id: lead
+    name: Lead
+    backend: claude
+    model: claude-opus-5-5
+    kind: primary
+  - id: builder
+    name: Builder
+    backend: codex
+    model: gpt-6.1-terra
+    kind: worker
+  - id: writer
+    name: Writer
+    backend: claude
+    model: claude-sonnet-5-5
+    kind: custom
+steps:
+  - id: map
+    participant: lead
+    role: researcher
+    system_prompt: |-
+      Find the riskiest untested code in the scope the user gave. Run the
+      project's coverage tool if it has one; otherwise find code with no
+      tests by reading. Rank by risk: how often it changes (git log), how
+      much depends on it, how complex it is, and whether it touches money,
+      data or security. List the top targets with the evidence. Change
+      nothing.
+    inputs: [user_prompt]
+    tools: [Read, Grep, Glob, Bash]
+    effect: local
+    output: targets.md
+  - id: plan
+    participant: lead
+    role: planner
+    system_prompt: |-
+      For each target, list the behaviours worth pinning — normal cases,
+      edges, errors — and how to test them in the project's own framework
+      and style, with fakes only where the code reaches outside. Tests must
+      check behaviour, not implementation details. Do not write code.
+    inputs: [user_prompt, targets.md]
+    tools: [Read, Grep, Glob]
+    effect: local
+    output: plan.md
+  - id: write
+    participant: builder
+    role: test-writer
+    inputs: [user_prompt, targets.md, plan.md]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: diff
+  - id: fix
+    participant: builder
+    role: custom
+    system_prompt: |-
+      You are the FIX step. It runs once, and again each time the VERIFY
+      step sends the work back. Run the new tests and the full suite. Fix
+      failing or flaky TESTS only — never production code. If a test fails
+      because the code really is wrong, keep the test, mark it as an
+      expected failure or skip in the project's own way with a clear
+      "known bug" reason, and list it. If VERIFY sent you back, fix exactly
+      what it named. Quote the result lines.
+    inputs: [user_prompt, plan.md, diff]
+    tools: [Read, Glob, Grep, Write, Edit, Bash]
+    effect: local
+    output: diff
+  - id: verify
+    participant: lead
+    role: custom
+    verdict_gate: true
+    system_prompt: |-
+      You are the VERIFY step. Check by running: the new tests pass, and
+      pass again on a second run (no flakiness); the full suite passes;
+      git shows no production code changed. Read the tests: they assert
+      behaviour, cover the planned cases, and aren't trivial or
+      over-mocked. Any of those failing is blocking.
+
+      End with a line that is exactly APPROVED if nothing is blocking,
+      otherwise CHANGES REQUESTED — that sends the work back to FIX.
+    inputs: [user_prompt, plan.md, diff]
+    tools: [Read, Grep, Glob, Bash]
+    effect: local
+    on_fail:
+      action: goto
+      target: fix
+      max_retries: 3
+    output: verify.md
+  - id: report
+    participant: writer
+    role: technical-writer
+    system_prompt: |-
+      Report: the targets and why they were chosen, the tests added per
+      target, coverage before and after if a tool measured it, any real bugs
+      the tests found (with the skipped or expected-failure test that pins
+      each), and what is still untested.
+    inputs: [user_prompt, targets.md, plan.md, diff, verify.md]
+    tools: [Read, Grep, Glob]
+    effect: local
+    output: report.md
+author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
+version: 1.0.0
+tags: [testing, implementation, repo, claude, codex]
