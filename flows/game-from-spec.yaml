@@ -1,5 +1,5 @@
 name: "Build a game from a spec"
-description: "Build a game from its spec unattended, a batch of milestones at a time: plan, build, then fix and verify in a loop until batch-mode compiles and the game's own tests pass, extend the tests, polish without changing behaviour, log it, and go round again until every milestone is done"
+description: "Build a game from its spec unattended, a batch of milestones at a time: plan, build, then fix and verify in a loop until batch-mode compiles and the game's own tests pass, extend the tests, polish without changing behaviour, log it, and go round again until every milestone is done, then a final review of the whole run"
 input: user_prompt
 default_prompt: |-
   You are working unattended. I can't answer questions or approve anything until I'm back. Don't stop to ask. Make sensible decisions, write them down, and keep going until the game is as complete as you can make it.
@@ -117,12 +117,13 @@ steps:
     tools: [Read, Grep, Glob, Bash]
     effect: local
     # Loop: a rejection goes back to FIX with this report, then VERIFY runs
-    # again. The budget is per run, shared by every batch of milestones; when
-    # it runs out the run pauses for a person instead of rolling on.
+    # again. The budget is per run, shared by every batch of milestones (up to
+    # 12), so it is sized for the whole run: about two fix rounds per batch.
+    # Only when it runs out does the run pause for a person.
     on_fail:
       action: goto
       target: fix
-      max_retries: 6
+      max_retries: 24
     output: verify.md
   - id: tests
     participant: builder
@@ -159,9 +160,8 @@ steps:
     inputs: [user_prompt, plan.md, diff, verify.md, tests_report.md]
     tools: [Read, Glob, Grep, Write, Edit, Bash]
     effect: local
-    # Human in the loop: the run stops here every batch, so a person can see
-    # the tests, talk to the step before, and continue when happy.
-    pause_before: true
+    # No checkpoint: the run goes straight on to LOG and NEXT. People review
+    # the finished run from spec/BUILD_LOG.md, not batch by batch.
     output: polish_report.md
   - id: log
     participant: lead
@@ -216,6 +216,42 @@ steps:
       target: plan
       max_retries: 12
     output: next.md
+  - id: final_review
+    participant: architect
+    role: custom
+    system_prompt: |-
+      You are the FINAL REVIEW step of an unattended game build. It runs
+      once, after NEXT has decided the run is done, and it is the last thing
+      before a person picks up a phone and plays.
+
+      Review the whole run, not one batch. Read CLAUDE.md, the spec,
+      spec/BUILD_LOG.md and NEXT's verdict, then look at everything the run
+      changed (git diff and git status against where the run started). Then
+      check it yourself:
+        - Compile in the engine's batch mode (the command is in CLAUDE.md)
+          and run the project's Build All / tests. Quote the result lines.
+        - Where the project has one, run the bot or replay harness and look
+          at the screenshots it writes.
+        - Read for problems no test catches: a milestone in the spec that is
+          missing or stubbed, behaviour that contradicts the spec's pillars or
+          tuning numbers, a change that touched a sibling project, leftover
+          debug code, and anything that will only show up on a device (touch,
+          tilt, performance, two phones, online play).
+
+      Do not change any code. Write your review to spec/FINAL_REVIEW.md
+      (replace it if it exists) and reply with the same text, in this order:
+        - Verdict: ready to play, or not yet and why, in two or three lines.
+        - Play these first: a short checklist for the person on a real
+          device, most important first.
+        - Risks and problems, each with the file and the evidence.
+        - What nobody has tried yet.
+        - Loose ends: stubs, TODOs and decisions left for the person.
+      Never claim something was run or seen if it wasn't. Do not commit or
+      push.
+    inputs: [user_prompt, build_log.md, next.md]
+    tools: [Read, Grep, Glob, Bash, Write]
+    effect: local
+    output: final_review.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.2.0
 tags: [implementation, testing, planning, repo, mobile, claude]
