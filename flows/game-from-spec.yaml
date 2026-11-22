@@ -117,12 +117,13 @@ steps:
     tools: [Read, Grep, Glob, Bash]
     effect: local
     # Loop: a rejection goes back to FIX with this report, then VERIFY runs
-    # again. The budget is per run, shared by every batch of milestones; when
-    # it runs out the run pauses for a person instead of rolling on.
+    # again. The budget is per run, shared by every batch of milestones (up to
+    # 12), so it is sized for the whole run: about two fix rounds per batch.
+    # Only when it runs out does the run pause for a person.
     on_fail:
       action: goto
       target: fix
-      max_retries: 6
+      max_retries: 24
     output: verify.md
   - id: tests
     participant: builder
@@ -159,9 +160,8 @@ steps:
     inputs: [user_prompt, plan.md, diff, verify.md, tests_report.md]
     tools: [Read, Glob, Grep, Write, Edit, Bash]
     effect: local
-    # Human in the loop: the run stops here every batch, so a person can see
-    # the tests, talk to the step before, and continue when happy.
-    pause_before: true
+    # No checkpoint: the run goes straight on to LOG and NEXT. People review
+    # the finished run from spec/BUILD_LOG.md, not batch by batch.
     output: polish_report.md
   - id: log
     participant: lead
@@ -217,5 +217,5 @@ steps:
       max_retries: 12
     output: next.md
 author: { name: "Overcli", url: "https://github.com/overcodelions/overcli" }
-version: 1.0.0
+version: 1.1.0
 tags: [implementation, testing, planning, repo, mobile, claude]
